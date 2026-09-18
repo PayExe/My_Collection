@@ -1,0 +1,1 @@
+try to use fastapi and not apirouter
