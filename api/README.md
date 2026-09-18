@@ -8,10 +8,15 @@ Depuis la racine du projet :
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
+python -m pip install -r api/requirements.txt
+Copy-Item api/.env.example api/.env
+# Remplacer ensuite SECRET_KEY dans api/.env par une vraie valeur aleatoire
 python -m uvicorn api.main:app --reload
 ```
 
 Documentation interactive : http://127.0.0.1:8000/docs
+
+Documentation détaillée de l'authentification : [`docs/authentication.md`](docs/authentication.md)
 
 ## Organisation
 
