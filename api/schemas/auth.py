@@ -1,11 +1,11 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UserCreate(BaseModel):
-    email: str
-    password: str
+    email: str = Field(min_length=3, max_length=254)
+    password: str = Field(min_length=8, max_length=72)
 
 
 class UserPublic(BaseModel):
@@ -16,8 +16,8 @@ class UserPublic(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: str
-    password: str
+    email: str = Field(min_length=3, max_length=254)
+    password: str = Field(min_length=8, max_length=72)
 
 
 class TokenResponse(BaseModel):

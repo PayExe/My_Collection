@@ -18,6 +18,12 @@ Documentation interactive : http://127.0.0.1:8000/docs
 
 Documentation détaillée de l'authentification : [`docs/authentication.md`](docs/authentication.md)
 
+Le serveur doit être lancé depuis la racine `My_Collection`. Ne lance pas `uvicorn main:app` depuis `api/`, car les imports utilisent le package `api` :
+
+```powershell
+python -m uvicorn api.main:app --reload
+```
+
 ## Organisation
 
 ```text
@@ -40,6 +46,8 @@ api/
 ├── dependencies/
 │   ├── database.py            # Session de base de données
 │   └── auth.py                # Utilisateur connecté et vérification JWT
+├── services/
+│   └── auth_service.py        # Logique d'authentification sans FastAPI
 └── routers/
     ├── auth.py                # Routes /auth/*
     ├── catalog.py             # Routes publiques /items/*

@@ -34,7 +34,12 @@ export interface User {
 
 export interface AuthResponse {
   access_token: string
-  token_type: string
+  token_type: "bearer"
+}
+
+export interface AuthCredentials {
+  email: string
+  password: string
 }
 
 export interface ApiError {

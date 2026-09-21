@@ -226,6 +226,8 @@ Elle doit contenir uniquement le hash bcrypt correspondant.
 
 Il faut utiliser un schema de réponse qui ne contient pas `hashed_password`.
 
+Les schemas d'entrée peuvent aussi utiliser `Field` pour empêcher les données incohérentes avant d'atteindre la logique métier. Dans ce projet, l'email possède une longueur maximale et le mot de passe est limité à 8-72 caractères. La limite haute correspond à la limite de bcrypt.
+
 ### Réponse de connexion
 
 ```json
@@ -345,6 +347,28 @@ router = APIRouter(
 )
 ```
 
+Les routes ne réalisent pas directement toutes les opérations de recherche et de sauvegarde. Elles appellent `services/auth_service.py`, puis transforment les erreurs métier en `HTTPException`.
+
+## 8. Service d'authentification
+
+Le fichier `services/auth_service.py` contient la logique métier sans importer FastAPI :
+
+- normaliser un email ;
+- rechercher un utilisateur ;
+- créer un utilisateur et hacher son mot de passe ;
+- vérifier les identifiants.
+
+Le service ne connaît ni les codes HTTP ni `HTTPException`. Il renvoie un utilisateur, `None`, ou lève une erreur Python métier comme `EmailAlreadyUsedError`.
+
+La route reste responsable de la partie HTTP :
+
+```text
+router
+    -> appelle le service
+    -> transforme une erreur métier en HTTPException(409 ou 401)
+    -> choisit le response_model et le code HTTP
+```
+
 ### `POST /auth/register`
 
 Étapes de la route :
@@ -383,7 +407,7 @@ Elle ne reçoit pas de mot de passe et renvoie uniquement :
 }
 ```
 
-## 8. Branchement dans `main.py`
+## 9. Branchement dans `main.py`
 
 `main.py` crée une seule instance de `FastAPI` et inclut le router d'authentification.
 
@@ -391,7 +415,7 @@ Il ne doit pas contenir directement les décorateurs `@app.post` ou `@app.get` d
 
 Le router doit être inclus avec `app.include_router(...)`. Grâce au préfixe `/auth`, une route `@router.get("/me")` devient `/auth/me`.
 
-## 9. Tester avec `/docs`
+## 10. Tester avec `/docs`
 
 Lancer le serveur depuis la racine du projet :
 
@@ -412,7 +436,7 @@ Tester dans cet ordre :
 6. appeler `GET /auth/me` ;
 7. tester sans token ou avec un mauvais token pour vérifier l'erreur `401`.
 
-## 10. Erreurs fréquentes
+## 11. Erreurs fréquentes
 
 ### `router is not defined`
 

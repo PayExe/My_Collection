@@ -1,0 +1,227 @@
+.auth-shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
+  background: #f5f2ea;
+}
+
+.auth-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(2rem, 5vw, 5rem);
+  color: #f5f2ea;
+  background: #17251f;
+  overflow: hidden;
+}
+
+.auth-intro::after {
+  content: "";
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  right: -13rem;
+  bottom: -10rem;
+  border: 1px solid rgba(232, 241, 204, 0.28);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2rem rgba(232, 241, 204, 0.04), 0 0 0 5rem rgba(232, 241, 204, 0.03);
+}
+
+.auth-brand {
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: fit-content;
+  color: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  color: #17251f;
+  background: #d9ed72;
+  border-radius: 0.7rem;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.intro-copy {
+  z-index: 1;
+  max-width: 33rem;
+  margin: 5rem 0;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: #a5bd68;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.intro-copy h1 {
+  max-width: 11ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: -0.07em;
+  line-height: 0.96;
+}
+
+.intro-copy p:not(.eyebrow) {
+  max-width: 28rem;
+  margin-top: 1.75rem;
+  color: #c2cbbd;
+  font-size: 1rem;
+}
+
+.intro-footnote {
+  z-index: 1;
+  color: #819183;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-panel {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: min(100%, 28rem);
+}
+
+.auth-heading h2 {
+  color: #17251f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.auth-heading > p:last-child {
+  margin-top: 1rem;
+  color: #687069;
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 2.5rem;
+}
+
+.auth-form label {
+  margin-top: 0.7rem;
+  color: #334238;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  color: #17251f;
+  background: #fffdf8;
+  border: 1px solid #d5d7cb;
+  border-radius: 0.65rem;
+  font: inherit;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.auth-form input:focus {
+  border-color: #7c9b43;
+  box-shadow: 0 0 0 3px rgba(124, 155, 67, 0.16);
+}
+
+.auth-submit {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  color: #17251f;
+  background: #d9ed72;
+  border: 0;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #c7e058;
+  transform: translateY(-2px);
+}
+
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.form-message {
+  margin-top: 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.82rem;
+}
+
+.form-error {
+  color: #a33c35;
+}
+
+.form-success {
+  color: #477329;
+}
+
+.auth-switch {
+  margin-top: 1.75rem;
+  color: #687069;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #4d6f2e;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .auth-shell {
+    display: block;
+  }
+
+  .auth-intro {
+    min-height: 18rem;
+    padding: 1.5rem;
+  }
+
+  .intro-copy {
+    margin: 3rem 0 1rem;
+  }
+
+  .intro-copy h1 {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+
+  .intro-copy p:not(.eyebrow),
+  .intro-footnote {
+    display: none;
+  }
+
+  .auth-panel {
+    min-height: calc(100dvh - 18rem);
+    padding: 2.5rem 1.5rem;
+  }
+}
