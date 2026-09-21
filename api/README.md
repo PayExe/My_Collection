@@ -18,6 +18,8 @@ Documentation interactive : http://127.0.0.1:8000/docs
 
 Documentation détaillée de l'authentification : [`docs/authentication.md`](docs/authentication.md)
 
+Guide pas à pas avec le code : [`docs/authentication-step-by-step.md`](docs/authentication-step-by-step.md)
+
 Le serveur doit être lancé depuis la racine `My_Collection`. Ne lance pas `uvicorn main:app` depuis `api/`, car les imports utilisent le package `api` :
 
 ```powershell

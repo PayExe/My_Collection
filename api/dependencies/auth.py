@@ -11,16 +11,9 @@ from api.models.user import User
 
 
 bearer_scheme = HTTPBearer(auto_error=False)
-SessionDependency = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_current_user(
-    credentials: Annotated[
-        HTTPAuthorizationCredentials | None,
-        Depends(bearer_scheme),
-    ],
-    session: SessionDependency,
-) -> User:
+async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)], session: Annotated[AsyncSession, Depends(get_session)]) -> User:
     unauthorized = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Authentification invalide",

@@ -31,10 +31,7 @@ app.add_middleware(
 
 
 @app.exception_handler(HTTPException)
-async def http_exception_handler(
-    _: Request,
-    exception: HTTPException,
-) -> JSONResponse:
+async def http_exception_handler(_: Request, exception: HTTPException) -> JSONResponse:
     return JSONResponse(
         status_code=exception.status_code,
         content={
@@ -47,10 +44,7 @@ async def http_exception_handler(
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    _: Request,
-    __: RequestValidationError,
-) -> JSONResponse:
+async def validation_exception_handler(_: Request, __: RequestValidationError) -> JSONResponse:
     return JSONResponse(
         status_code=422,
         content={

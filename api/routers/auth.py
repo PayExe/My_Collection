@@ -15,9 +15,10 @@ from api.services.auth_service import (
 )
 
 
-router = APIRouter(prefix="/auth", tags=["Authentification"])
-SessionDependency = Annotated[AsyncSession, Depends(get_session)]
-CurrentUserDependency = Annotated[User, Depends(get_current_user)]
+router = APIRouter(
+    prefix="/auth",
+    tags=["Authentification"],
+)
 
 
 @router.post(
@@ -27,10 +28,7 @@ CurrentUserDependency = Annotated[User, Depends(get_current_user)]
     summary="Créer un compte",
     responses={409: {"description": "Email déjà utilisé"}},
 )
-async def register(
-    payload: UserCreate,
-    session: SessionDependency,
-) -> UserPublic:
+async def register(payload: UserCreate, session: Annotated[AsyncSession, Depends(get_session)]) -> UserPublic:
     try:
         user = await create_user(session, payload.email, payload.password)
     except EmailAlreadyUsedError:
@@ -46,12 +44,9 @@ async def register(
     "/login",
     response_model=TokenResponse,
     summary="Se connecter",
-    responses={401: {"description": "..."}},
+    responses={401: {"description": "Identifiants invalides"}},
 )
-async def login(
-    payload: LoginRequest,
-    session: SessionDependency,
-) -> TokenResponse:
+async def login(payload: LoginRequest, session: Annotated[AsyncSession, Depends(get_session)]) -> TokenResponse:
     user = await authenticate_user(session, payload.email, payload.password)
     if user is None:
         raise HTTPException(
@@ -72,5 +67,5 @@ async def login(
     summary="Récupérer l'utilisateur connecté",
     responses={401: {"description": "Authentification invalide"}},
 )
-async def get_me(current_user: CurrentUserDependency) -> UserPublic:
+async def get_me(current_user: Annotated[User, Depends(get_current_user)]) -> UserPublic:
     return UserPublic.model_validate(current_user)

@@ -14,10 +14,7 @@ def normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
-async def find_user_by_email(
-    session: AsyncSession,
-    email: str,
-) -> User | None:
+async def find_user_by_email(session: AsyncSession, email: str) -> User | None:
     normalized_email = normalize_email(email)
     result = await session.exec(
         select(User).where(User.email == normalized_email)
@@ -25,11 +22,7 @@ async def find_user_by_email(
     return result.one_or_none()
 
 
-async def create_user(
-    session: AsyncSession,
-    email: str,
-    password: str,
-) -> User:
+async def create_user(session: AsyncSession, email: str, password: str) -> User:
     normalized_email = normalize_email(email)
     if await find_user_by_email(session, normalized_email) is not None:
         raise EmailAlreadyUsedError
@@ -49,11 +42,7 @@ async def create_user(
     return user
 
 
-async def authenticate_user(
-    session: AsyncSession,
-    email: str,
-    password: str,
-) -> User | None:
+async def authenticate_user(session: AsyncSession, email: str, password: str) -> User | None:
     user = await find_user_by_email(session, email)
     if user is None or not verify_password(password, user.hashed_password):
         return None
