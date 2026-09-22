@@ -3,7 +3,7 @@ from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from api.core.config import DATABASE_URL
-from api.models.user import User  # noqa: F401 - enregistre User dans les metadata
+from api.models.user import User as _User
 
 
 engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=False)
@@ -21,4 +21,3 @@ async def create_db_and_tables() -> None:
 
 async def close_database() -> None:
     await engine.dispose()
-

@@ -1,79 +1,40 @@
-# React + TypeScript + Vite
+# Ma Collection
 
-## Documentation du projet
+Application de gestion d'une collection de jeux vidéo.
 
-- [Authentification et routes protégées](docs/authentication-front.md)
+## Déjà fait
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Authentification backend : inscription, connexion, bcrypt et JWT
+- Routes protégées côté frontend
+- Page de connexion et d'inscription
+- Structure FastAPI / React mise en place
+- Client HTTP frontend
 
-Currently, two official plugins are available:
+## Reste à faire
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Backend
 
-## React Compiler
+- [ ] Créer le modèle `Game`
+- [ ] Créer les routes publiques `/items`
+- [ ] Ajouter recherche, filtres et pagination
+- [ ] Ajouter au moins 40 jeux dans `seed.py`
+- [ ] Créer les routes `/me/collection`
+- [ ] Créer les statistiques `/me/stats`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
 
-## Expanding the ESLint configuration
+- [ ] Afficher le catalogue des jeux
+- [ ] Ajouter recherche, filtres et pagination
+- [ ] Créer la page de collection
+- [ ] Créer la page de statistiques
+- [ ] Ajouter `CollectionContext`
+- [ ] Ajouter le hook générique `useLocalStorage<T>`
+- [ ] Gérer les états chargement, erreur et vide
+- [ ] Finaliser le responsive mobile
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Finalisation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- [ ] Créer le README de lancement complet
+- [ ] Renommer `MyCollection` en `web`
+- [ ] Vérifier toutes les routes dans `/docs`
+- [ ] Tester l'application sur une machine vierge

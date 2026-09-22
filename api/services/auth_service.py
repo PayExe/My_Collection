@@ -7,7 +7,7 @@ from api.models.user import User
 
 
 class EmailAlreadyUsedError(Exception):
-    """Raised when an account already exists for an email address."""
+    pass
 
 
 def normalize_email(email: str) -> str:
