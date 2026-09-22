@@ -14,3 +14,81 @@ body {
 #root {
   min-height: 100dvh;
 }
+
+.route-loading {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  color: #687069;
+}
+
+.home-page {
+  display: grid;
+  min-height: 100dvh;
+  align-content: center;
+  justify-items: start;
+  gap: 1rem;
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.home-page h1 {
+  max-width: 10ch;
+  color: #17251f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: -0.07em;
+  line-height: 0.95;
+}
+
+.home-page > p:not(.eyebrow) {
+  max-width: 30rem;
+  color: #687069;
+  font-size: 1.05rem;
+}
+
+.home-page .eyebrow {
+  margin: 0;
+  color: #4d6f2e;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.home-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.home-button,
+.home-link {
+  color: #17251f;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-button {
+  padding: 0.9rem 1.1rem;
+  background: #d9ed72;
+  border-radius: 0.65rem;
+}
+
+.home-link {
+  color: #4d6f2e;
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    padding: 1.5rem;
+  }
+
+  .home-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

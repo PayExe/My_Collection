@@ -18,3 +18,7 @@ export function loginUser(credentials: AuthCredentials): Promise<AuthResponse> {
     body: JSON.stringify(credentials),
   })
 }
+
+export function getCurrentUser(): Promise<User> {
+  return apiRequest<User>("/auth/me")
+}

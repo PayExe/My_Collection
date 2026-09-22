@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 import type { AuthCredentials } from "../types/api"
+import { useAuth } from "../hooks/useAuth"
 import { ApiRequestError } from "../services/apiClient"
 import { loginUser, registerUser } from "../services/authService"
 import "../styles/auth.css"
@@ -14,6 +15,7 @@ interface AuthPageProps {
 
 export function AuthPage({ mode }: AuthPageProps) {
   const navigate = useNavigate()
+  const { signIn } = useAuth()
   const isRegister = mode === "register"
   const [credentials, setCredentials] = useState<AuthCredentials>({
     email: "",
@@ -42,13 +44,11 @@ export function AuthPage({ mode }: AuthPageProps) {
     try {
       if (isRegister) {
         await registerUser(credentials)
-        setNotice("Compte créé. Tu peux maintenant te connecter.")
-        setCredentials({ email: credentials.email, password: "" })
-        setConfirmation("")
+        navigate("/login")
       } else {
         const response = await loginUser(credentials)
-        localStorage.setItem("access_token", response.access_token)
-        navigate("/games")
+        await signIn(response.access_token)
+        navigate("/home")
       }
     } catch (reason: unknown) {
       setError(
@@ -64,7 +64,7 @@ export function AuthPage({ mode }: AuthPageProps) {
   return (
     <main className="auth-shell">
       <section className="auth-intro" aria-label="Présentation">
-        <Link className="auth-brand" to="/login">
+        <Link className="auth-brand" to="/">
           <span className="brand-mark">MC</span>
           <span>Ma Collection</span>
         </Link>

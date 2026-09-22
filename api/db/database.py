@@ -21,3 +21,4 @@ async def create_db_and_tables() -> None:
 
 async def close_database() -> None:
     await engine.dispose()
+
