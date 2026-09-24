@@ -65,29 +65,29 @@ export function AuthPage({ mode }: AuthPageProps) {
     <main className="auth-shell">
       <section className="auth-intro" aria-label="Présentation">
         <Link className="auth-brand" to="/">
-          <span className="brand-mark">MC</span>
-          <span>Ma Collection</span>
+          <span className="brand-mark">GF</span>
+          <span>Gamefolio</span>
         </Link>
         <div className="intro-copy">
-          <p className="eyebrow">Ludothèque personnelle</p>
-          <h1>Garde une trace de chaque aventure.</h1>
+          <p className="eyebrow">Collection de jeux</p>
+          <h1>Tous tes jeux, au même endroit.</h1>
           <p>
-            Retrouve tes jeux, organise tes envies et construis une collection
-            qui te ressemble.
+            Garde une trace de ce que tu possèdes et de ce que tu veux
+            découvrir.
           </p>
         </div>
-        <p className="intro-footnote">Une collection. Tous tes mondes.</p>
+        <p className="intro-footnote">Gamefolio — ta collection de jeux.</p>
       </section>
 
       <section className="auth-panel">
         <div className="auth-card">
-          <div className="auth-heading">
-            <p className="eyebrow">{isRegister ? "Nouveau membre" : "Bon retour"}</p>
-            <h2>{isRegister ? "Créer un compte" : "Se connecter"}</h2>
+          <div className="auth-heading">  
+            <p className="eyebrow">Gamefolio</p>
+            <h2>{isRegister ? "Inscription" : "Connexion"}</h2>
             <p>
               {isRegister
-                ? "Commence à cataloguer tes jeux en quelques secondes."
-                : "Retrouve ta collection là où tu l'as laissée."}
+                ? "Crée ton compte pour commencer."
+                : "Retrouve ta collection."}
             </p>
           </div>
 
@@ -138,8 +138,8 @@ export function AuthPage({ mode }: AuthPageProps) {
               {isSubmitting
                 ? "Chargement..."
                 : isRegister
-                  ? "Créer mon compte"
-                  : "Ouvrir ma collection"}
+                  ? "Créer le compte"
+                  : "Se connecter"}
             </button>
           </form>
 
