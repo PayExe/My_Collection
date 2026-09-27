@@ -1,6 +1,6 @@
 # Authentification complète
 
-Cette documentation explique comment réaliser l'authentification du backend **Ma Collection** avec FastAPI, SQLModel, bcrypt et JWT.
+Cette documentation explique comment réaliser l'authentification du backend **Ma Collection** avec FastAPI, SQLAlchemy, bcrypt et JWT.
 
 ## Objectif
 
@@ -28,7 +28,7 @@ Réalise l'authentification dans cet ordre. Vérifie chaque étape avant de cont
 
 ### Étape 1 — Installer et vérifier les dépendances
 
-Installer FastAPI, Uvicorn, SQLModel, aiosqlite, Passlib, python-jose et python-dotenv.
+Installer FastAPI, Uvicorn, SQLAlchemy, asyncpg, Passlib, python-jose et python-dotenv.
 
 Vérifier que l'application vide démarre avec :
 
@@ -55,7 +55,7 @@ Objectif : ne coder aucun secret directement dans Python.
 
 Dans `db/database.py` :
 
-1. créer le moteur SQLite asynchrone ;
+1. créer le moteur PostgreSQL asynchrone ;
 2. créer la fabrique de sessions ;
 3. écrire `get_session()` avec `yield` ;
 4. créer les tables au démarrage de l'application.
@@ -169,7 +169,8 @@ api/
 │   ├── config.py            # SECRET_KEY et durée du token
 │   └── security.py          # bcrypt et JWT
 ├── db/
-│   └── database.py          # moteur et sessions SQLite
+│   ├── base.py              # base declarative SQLAlchemy
+│   └── database.py          # moteur et sessions PostgreSQL
 ├── models/
 │   └── user.py              # table User
 ├── schemas/
@@ -253,7 +254,7 @@ Le fichier `.env` local contient par exemple :
 SECRET_KEY=une-cle-secrete-longue-et-aleatoire
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
-DATABASE_URL=sqlite+aiosqlite:///./collection.db
+DATABASE_URL=postgresql+asyncpg://collection_user:collection_password@127.0.0.1:5433/ma_collection
 ```
 
 Le fichier `.env` ne doit jamais être commit. Seul `.env.example`, sans vraie clé secrète, doit être versionné.

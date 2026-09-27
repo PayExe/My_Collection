@@ -18,5 +18,5 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
 )
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "sqlite+aiosqlite:///./collection.db",
+    "postgresql+asyncpg://collection_user:collection_password@127.0.0.1:5433/ma_collection",
 )

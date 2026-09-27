@@ -1,9 +1,8 @@
 fastapi
 uvicorn[standard]
-sqlmodel
-aiosqlite
-passlib[bcrypt]
-bcrypt<5
-python-jose[cryptography]
+sqlalchemy
+asyncpg
+PyJWT
+pwdlib[argon2]
 python-dotenv
 python-multipart

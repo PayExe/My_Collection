@@ -33,7 +33,7 @@ python -m pip install -r api/requirements.txt
 Le fichier `api/requirements.txt` contient notamment :
 
 - `fastapi` et `uvicorn` pour l'API ;
-- `sqlmodel` et `aiosqlite` pour SQLite asynchrone ;
+- `sqlalchemy` et `asyncpg` pour PostgreSQL asynchrone ;
 - `passlib[bcrypt]` et `bcrypt<5` pour les mots de passe ;
 - `python-jose` pour les JWT ;
 - `python-dotenv` pour le fichier `.env`.
@@ -54,7 +54,7 @@ Puis modifier `api/.env` :
 SECRET_KEY=une-cle-secrete-longue-et-aleatoire
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
-DATABASE_URL=sqlite+aiosqlite:///./collection.db
+DATABASE_URL=postgresql+asyncpg://collection_user:collection_password@127.0.0.1:5433/ma_collection
 ```
 
 Le fichier `.env` est ignoré par Git. Il ne faut jamais publier la vraie valeur de `SECRET_KEY`.
@@ -66,18 +66,18 @@ Fichier : `api/models/user.py`
 Ce fichier décrit la table SQL. Il ne décrit pas directement le JSON reçu par une route.
 
 ```python
-from sqlmodel import Field, SQLModel
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from api.db.base import Base
 
 
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    email: str = Field(
-        unique=True,
-        index=True,
-        min_length=3,
-        max_length=254,
-    )
-    hashed_password: str = Field(max_length=255)
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255))
 ```
 
 Le champ important est `hashed_password` :

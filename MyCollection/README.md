@@ -4,7 +4,7 @@ Application de gestion d'une collection de jeux vidéo.
 
 ## Déjà fait
 
-- Authentification backend : inscription, connexion, bcrypt et JWT
+- Authentification backend : inscription, connexion, Argon2 et JWT
 - Routes protégées côté frontend
 - Page de connexion et d'inscription
 - Structure FastAPI / React mise en place

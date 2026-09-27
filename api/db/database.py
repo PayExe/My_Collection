@@ -1,8 +1,12 @@
-from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
-from sqlmodel import SQLModel
-from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from api.core.config import DATABASE_URL
+from api.db.base import Base
 from api.models.user import User as _User
 
 
@@ -16,7 +20,7 @@ session_factory = async_sessionmaker(
 
 async def create_db_and_tables() -> None:
     async with engine.begin() as connection:
-        await connection.run_sync(SQLModel.metadata.create_all)
+        await connection.run_sync(Base.metadata.create_all)
 
 
 async def close_database() -> None:

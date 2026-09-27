@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+import jwt
+from pwdlib import PasswordHash
 
 from api.core.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
@@ -10,15 +10,15 @@ from api.core.config import (
 )
 
 
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+password_hash = PasswordHash.recommended()
 
 
 def hash_password(password: str) -> str:
-    return password_context.hash(password)
+    return password_hash.hash(password)
 
 
 def verify_password(password: str, hashed_password: str) -> bool:
-    return password_context.verify(password, hashed_password)
+    return password_hash.verify(password, hashed_password)
 
 
 def create_access_token(subject: str) -> str:
@@ -32,7 +32,7 @@ def create_access_token(subject: str) -> str:
 def get_subject_from_token(token: str) -> str | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except JWTError:
+    except jwt.PyJWTError:
         return None
 
     subject = payload.get("sub")

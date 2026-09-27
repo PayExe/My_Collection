@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.core.security import hash_password, verify_password
 from api.models.user import User
@@ -16,10 +16,10 @@ def normalize_email(email: str) -> str:
 
 async def find_user_by_email(session: AsyncSession, email: str) -> User | None:
     normalized_email = normalize_email(email)
-    result = await session.exec(
+    result = await session.execute(
         select(User).where(User.email == normalized_email)
     )
-    return result.one_or_none()
+    return result.scalar_one_or_none()
 
 
 async def create_user(session: AsyncSession, email: str, password: str) -> User:

@@ -1,6 +1,6 @@
 # Backend Ma Collection
 
-Backend de l'application **Ma Collection**, réalisé avec FastAPI, SQLModel et SQLite.
+Backend de l'application **Ma Collection**, réalisé avec FastAPI, SQLAlchemy et PostgreSQL.
 
 ## Lancer le backend
 
@@ -9,6 +9,7 @@ Depuis la racine du projet :
 ```powershell
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r api/requirements.txt
+docker compose up -d postgres
 Copy-Item api/.env.example api/.env
 # Remplacer ensuite SECRET_KEY dans api/.env par une vraie valeur aleatoire
 python -m uvicorn api.main:app --reload
@@ -36,7 +37,8 @@ api/
 │   ├── config.py              # Configuration et variables d'environnement
 │   └── security.py            # Hash des mots de passe et JWT
 ├── db/
-│   └── database.py            # Connexion SQLite asynchrone
+│   ├── base.py                # Base declarative SQLAlchemy
+│   └── database.py            # Connexion PostgreSQL asynchrone
 ├── models/
 │   ├── user.py                # Table des utilisateurs
 │   ├── game.py                # Table du catalogue
@@ -60,11 +62,11 @@ api/
 
 - **`main.py`** : crée l'application FastAPI, configure le CORS et inclut les routers. Il ne contient aucune route métier.
 - **`routers/`** : contient les routes HTTP de l'API.
-- **`models/`** : décrit les tables et relations de la base de données avec SQLModel.
+- **`models/`** : décrit les tables et relations de la base de données avec SQLAlchemy.
 - **`schemas/`** : décrit les formats JSON reçus et renvoyés par l'API.
 - **`dependencies/`** : contient les fonctions utilisées avec `Depends`, notamment la session DB et l'utilisateur courant.
 - **`core/`** : contient la configuration et la sécurité.
-- **`db/`** : initialise le moteur SQLite asynchrone et les sessions.
+- **`db/`** : initialise le moteur PostgreSQL asynchrone et les sessions.
 - **`seed.py`** : ajoute les jeux de départ sans créer de doublons.
 
 ## Routes prévues

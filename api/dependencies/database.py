@@ -1,6 +1,6 @@
 from collections.abc import AsyncIterator
 
-from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.db.database import session_factory
 

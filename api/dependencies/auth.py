@@ -1,29 +1,26 @@
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.core.security import get_subject_from_token
 from api.dependencies.database import get_session
 from api.models.user import User
 
 
-bearer_scheme = HTTPBearer(auto_error=False)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)], session: Annotated[AsyncSession, Depends(get_session)]) -> User:
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: Annotated[AsyncSession, Depends(get_session)]) -> User:
     unauthorized = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Authentification invalide",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    if credentials is None:
-        raise unauthorized
-
-    subject = get_subject_from_token(credentials.credentials)
+    subject = get_subject_from_token(token)
     if subject is None:
         raise unauthorized
 
@@ -32,8 +29,8 @@ async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials |
     except ValueError:
         raise unauthorized from None
 
-    result = await session.exec(select(User).where(User.id == user_id))
-    user = result.one_or_none()
+    result = await session.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
     if user is None:
         raise unauthorized
 
