@@ -1,13 +1,19 @@
-from sqlmodel import Field, SQLModel
+from sqlalchemy import Integer, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
 
-class Game(SQLModel, table=True):
+from api.db.base import Base
+
+
+class Game(Base):
     """Jeu disponible dans le catalogue public."""
 
-    id: int | None = Field(default= None, primary_key=True) # clé unique
-    titre: str = Field(index=True, max_length=200)
-    categorie: str = Field(index=True, max_length=100)
-    description: str = Field(max_length=2000)
-    image_url: str = Field(max_length=500) # adresse de l'image du jeu
-    annee: int
-    studio: str = Field(max_length=150)
-    plateforme: str = Field(max_length=100)
+    __tablename__ = "games"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    titre: Mapped[str] = mapped_column(String(200), index=True, nullable=False)
+    categorie: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    image_url: Mapped[str] = mapped_column(String(500), nullable=False)
+    annee: Mapped[int] = mapped_column(Integer, nullable=False)
+    studio: Mapped[str] = mapped_column(String(150), nullable=False)
+    plateforme: Mapped[str] = mapped_column(String(100), nullable=False)

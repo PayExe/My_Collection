@@ -7,7 +7,10 @@ from sqlalchemy.ext.asyncio import (
 
 from api.core.config import DATABASE_URL
 from api.db.base import Base
+from api.models.collection_entry import CollectionEntry as _CollectionEntry
+from api.models.game import Game as _Game
 from api.models.user import User as _User
+
 
 
 engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=False)
