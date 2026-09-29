@@ -4,6 +4,12 @@ Ce document décrit la réalisation du CRUD de la collection personnelle.
 
 Le CRUD concerne les entrées de collection d'un utilisateur authentifié, et non le catalogue public des jeux.
 
+## Architecture retenue
+
+Les modèles backend utilisent actuellement SQLAlchemy asynchrone et héritent de `api.db.base.Base`. Le CRUD doit donc rester cohérent avec cette architecture : aucun modèle CRUD ne doit utiliser `SQLModel`.
+
+Le PDF impose une base SQLite asynchrone. Avant le lancement final, la configuration et les dépendances devront donc utiliser SQLite avec `aiosqlite` au lieu de la configuration PostgreSQL actuellement présente sur la branche distante. Cette décision doit être coordonnée avec le binôme.
+
 ## 1. Périmètre
 
 Routes concernées :
@@ -95,9 +101,9 @@ Contraintes à respecter :
 - `date_ajout` est générée par le serveur ;
 - `(user_id, game_id)` est unique.
 
-### Étape 3 : enregistrer les modèles dans SQLModel
+### Étape 3 : enregistrer les modèles dans SQLAlchemy
 
-Les modèles `Game` et `CollectionEntry` doivent être importés avant l'appel à `SQLModel.metadata.create_all`.
+Les modèles `Game` et `CollectionEntry` héritent de `Base` dans `api/db/base.py`. Ils doivent être importés avant l'appel à `Base.metadata.create_all`.
 
 Le démarrage suit ce flux :
 
@@ -106,7 +112,7 @@ démarrage FastAPI
     ↓
 import des modèles
     ↓
-création des tables SQLite manquantes
+création des tables de la base configurée
 ```
 
 ### Étape 4 : créer les schemas
@@ -166,7 +172,7 @@ création de l'entrée
     ↓
 génération de date_ajout
     ↓
-commit SQLite
+commit de la transaction
     ↓
 réponse avec le jeu imbriqué
 ```
@@ -249,9 +255,9 @@ get_current_user
     ↓ utilisateur connecté
 route collection
     ↓ vérifications métier
-SQLModel / AsyncSession
+SQLAlchemy / AsyncSession
     ↓
-SQLite
+base de données configurée
     ↓
 réponse JSON
 ```
