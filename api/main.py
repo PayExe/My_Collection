@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from api.db.database import close_database, create_db_and_tables
 from api.routers.auth import router as auth_router
 from api.routers.auth import token_router
+from api.routers.catalog import router as catalog_router
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -58,3 +59,4 @@ async def validation_exception_handler(_: Request, __: RequestValidationError) -
 
 app.include_router(auth_router)
 app.include_router(token_router)
+app.include_router(catalog_router)

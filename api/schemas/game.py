@@ -14,3 +14,12 @@ class ItemPublic(BaseModel):
     annee: int
     studio: str
     plateforme: str
+
+
+class PaginatedItems(BaseModel):
+    """Résultat paginé du catalogue public."""
+
+    total: int
+    page: int
+    limit: int
+    results: list[ItemPublic]
