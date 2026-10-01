@@ -16,6 +16,8 @@ python -m uvicorn api.main:app --reload
 
 Documentation interactive : http://127.0.0.1:8000/docs
 
+Documentation du fonctionnement de la base et du CRUD : [`docs/crud-fonctionnement.md`](docs/crud-fonctionnement.md)
+
 Documentation détaillée de l'authentification : [`docs/authentification-cours-et-projet.md`](../docs/authentification-cours-et-projet.md)
 
 Plan de migration de l'authentification : [`docs/plan-migration-authentification.md`](../docs/plan-migration-authentification.md)

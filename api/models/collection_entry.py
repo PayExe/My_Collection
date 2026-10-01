@@ -1,6 +1,13 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api.db.base import Base
@@ -15,6 +22,14 @@ class CollectionEntry(Base):
             "user_id",
             "game_id",
             name="unique_user_game",
+        ),
+        CheckConstraint(
+            "statut IN ('a_decouvrir', 'en_cours', 'termine')",
+            name="valid_collection_status",
+        ),
+        CheckConstraint(
+            "note BETWEEN 1 AND 5",
+            name="valid_collection_note",
         ),
     )
 
