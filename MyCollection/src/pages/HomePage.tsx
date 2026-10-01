@@ -54,6 +54,7 @@ export function HomePage() {
   const [limit, setLimit] = useState(6)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const [isLightMode, setIsLightMode] = useState(false)
 
   useEffect(() => {
     getCategories()
@@ -89,7 +90,7 @@ export function HomePage() {
   }
 
   return (
-    <main className="collection-shell">
+    <main className={isLightMode ? "collection-shell light-mode" : "collection-shell"}>
       <aside className="collection-sidebar">
         <Link className="collection-logo" to="/home" aria-label="Retour à l'accueil">
           <span className="logo-mark">GF</span>
@@ -123,7 +124,7 @@ export function HomePage() {
             <input type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); setActiveSlide(0) }} placeholder="Rechercher un jeu" />
           </label>
           <div className="header-actions">
-            <button className="header-icon-button" type="button" aria-label="Paramètres"><SettingsIcon /></button>
+            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode((current) => !current)}><SettingsIcon /></button>
             <button className="account-button" type="button" aria-label="Compte"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></button>
           </div>
         </header>
@@ -136,7 +137,7 @@ export function HomePage() {
             <section className="featured-section" aria-label="Jeu mis en avant">
               <button className="carousel-arrow carousel-arrow-left" type="button" onClick={() => changeSlide("previous")} aria-label="Jeu précédent"><ArrowIcon direction="left" /></button>
               <div className="featured-card" style={{ backgroundColor: cubeColors[activeSlide % cubeColors.length][0] }}>
-                <div className="featured-copy">
+                <div className="featured-copy" key={featuredGame.id}>
                   <p className="card-kicker">Choix du moment · {featuredGame.categorie}</p>
                   <h1>{featuredGame.titre}</h1>
                   <p>{featuredGame.description}</p>
@@ -157,7 +158,7 @@ export function HomePage() {
                 {games.map((game, index) => {
                   const colors = cubeColors[index % cubeColors.length]
                   return <Link className="game-card" to="/games" key={game.id}>
-                    <div className="game-cover" style={{ backgroundColor: colors[0] }}>
+                    <div className="game-cover" style={{ backgroundColor: colors[0], "--card-delay": `${Math.min(index, 8) * 45}ms` } as CSSProperties}>
                       <span className="game-number">{String(index + 1).padStart(2, "0")}</span>
                       <span className="game-cube" style={{ "--cube-color": colors[1] } as CSSProperties} aria-hidden="true"><span className="cube-face cube-front" /><span className="cube-face cube-top" /><span className="cube-face cube-side" /></span>
                       <strong>{game.titre}</strong>
