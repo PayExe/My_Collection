@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from "react"
 import { Link } from "react-router-dom"
 
 import { useAuth } from "../hooks/useAuth"
+import { useLocalStorage } from "../hooks/useLocalStorage"
 import { ApiRequestError } from "../services/apiClient"
 import { getCategories, getGames } from "../services/catalogService"
 import type { Item } from "../types/api"
@@ -54,7 +55,7 @@ export function HomePage() {
   const [limit, setLimit] = useState(6)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [isLightMode, setIsLightMode] = useState(false)
+  const [isLightMode, setIsLightMode] = useLocalStorage("gamefolio-light-mode", false)
 
   useEffect(() => {
     getCategories()
@@ -124,7 +125,7 @@ export function HomePage() {
             <input type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); setActiveSlide(0) }} placeholder="Rechercher un jeu" />
           </label>
           <div className="header-actions">
-            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode((current) => !current)}><SettingsIcon /></button>
+            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode(!isLightMode)}><SettingsIcon /></button>
             <button className="account-button" type="button" aria-label="Compte"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></button>
           </div>
         </header>
@@ -141,7 +142,7 @@ export function HomePage() {
                   <p className="card-kicker">Choix du moment · {featuredGame.categorie}</p>
                   <h1>{featuredGame.titre}</h1>
                   <p>{featuredGame.description}</p>
-                  <Link className="featured-link" to="/games">Découvrir le jeu <span aria-hidden="true">↗</span></Link>
+                  <Link className="featured-link" to={`/games/${featuredGame.id}`}>Découvrir le jeu <span aria-hidden="true">↗</span></Link>
                 </div>
               </div>
               <button className="carousel-arrow carousel-arrow-right" type="button" onClick={() => changeSlide("next")} aria-label="Jeu suivant"><ArrowIcon direction="right" /></button>
@@ -157,7 +158,7 @@ export function HomePage() {
               <div className="game-grid">
                 {games.map((game, index) => {
                   const colors = cubeColors[index % cubeColors.length]
-                  return <Link className="game-card" to="/games" key={game.id}>
+                  return <Link className="game-card" to={`/games/${game.id}`} key={game.id}>
                     <div className="game-cover" style={{ backgroundColor: colors[0], "--card-delay": `${Math.min(index, 8) * 45}ms` } as CSSProperties}>
                       <span className="game-number">{String(index + 1).padStart(2, "0")}</span>
                       <span className="game-cube" style={{ "--cube-color": colors[1] } as CSSProperties} aria-hidden="true"><span className="cube-face cube-front" /><span className="cube-face cube-top" /><span className="cube-face cube-side" /></span>

@@ -20,6 +20,25 @@ export interface Entry {
   item: Item
 }
 
+export interface CollectionCreate {
+  item_id: number
+  statut: Statut
+  note?: number
+  commentaire?: string | null
+}
+
+export interface CollectionUpdate {
+  statut?: Statut
+  note?: number
+  commentaire?: string | null
+}
+
+export interface CollectionStats {
+  total: number
+  par_statut: Record<Statut, number>
+  note_moyenne: number
+}
+
 export interface PaginatedItems {
   total: number
   page: number
