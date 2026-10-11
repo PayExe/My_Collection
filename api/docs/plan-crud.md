@@ -322,9 +322,9 @@ Fichiers principalement liés au CRUD :
 api/models/collection_entry.py
 api/schemas/collection.py
 api/routers/collection.py
-MyCollection/src/pages/CollectionPage.tsx
-MyCollection/src/pages/GameEditPage.tsx
-MyCollection/src/services/collectionService.ts
+web/src/pages/CollectionPage.tsx
+web/src/pages/GameEditPage.tsx
+web/src/services/collectionService.ts
 ```
 
 Fichiers partagés à modifier en coordination avec le binôme :
@@ -334,8 +334,8 @@ api/main.py
 api/db/database.py
 api/models/game.py
 api/schemas/game.py
-MyCollection/src/App.tsx
-MyCollection/src/types/api.ts
+web/src/App.tsx
+web/src/types/api.ts
 ```
 
 ## 8. Validation finale

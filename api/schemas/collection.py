@@ -14,7 +14,7 @@ class CollectionCreate(BaseModel):
 
     item_id: int = Field(gt=0)
     statut: Statut
-    note: int = Field(ge=1, le=5)
+    note: int = Field(default=1, ge=1, le=5)
     commentaire: str | None = Field(
         default=None,
         max_length=1000,

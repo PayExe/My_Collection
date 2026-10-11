@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from "react"
 import { Link } from "react-router-dom"
 
 import { useAuth } from "../hooks/useAuth"
+import { useLocalStorage } from "../hooks/useLocalStorage"
 import { ApiRequestError } from "../services/apiClient"
 import { getCategories, getGames } from "../services/catalogService"
 import type { Item } from "../types/api"
@@ -48,13 +49,14 @@ export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("Tous")
   const [activeSlide, setActiveSlide] = useState(0)
   const [games, setGames] = useState<Item[]>([])
+  const [featuredGames, setFeaturedGames] = useState<Item[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(6)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [isLightMode, setIsLightMode] = useState(false)
+  const [isLightMode, setIsLightMode] = useLocalStorage("gamefolio-light-mode", false)
 
   useEffect(() => {
     getCategories()
@@ -70,6 +72,7 @@ export function HomePage() {
         .then((response) => {
           setGames(response.results)
           setTotal(response.total)
+          if (page === 1) setFeaturedGames(response.results)
         })
       .catch((reason: unknown) => {
         setError(reason instanceof ApiRequestError ? reason.message : "Impossible de charger le catalogue.")
@@ -80,13 +83,13 @@ export function HomePage() {
   }, [limit, page, search, selectedCategory])
 
   const filterCategories = ["Tous", ...categories]
-  const featuredGame = games[activeSlide % Math.max(games.length, 1)]
+  const featuredGame = featuredGames[activeSlide % Math.max(featuredGames.length, 1)]
 
   function changeSlide(direction: "previous" | "next") {
-    if (games.length === 0) return
+    if (featuredGames.length === 0) return
     setActiveSlide((current) => direction === "next"
-      ? (current + 1) % games.length
-      : (current - 1 + games.length) % games.length)
+      ? (current + 1) % featuredGames.length
+      : (current - 1 + featuredGames.length) % featuredGames.length)
   }
 
   return (
@@ -124,7 +127,7 @@ export function HomePage() {
             <input type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); setActiveSlide(0) }} placeholder="Rechercher un jeu" />
           </label>
           <div className="header-actions">
-            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode((current) => !current)}><SettingsIcon /></button>
+            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode(!isLightMode)}><SettingsIcon /></button>
             <button className="account-button" type="button" aria-label="Compte"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></button>
           </div>
         </header>
@@ -133,7 +136,7 @@ export function HomePage() {
           {isLoading && <p className="catalog-message">Chargement du catalogue...</p>}
           {error && <p className="catalog-message catalog-error">{error}</p>}
           {!isLoading && !error && games.length === 0 && <p className="catalog-message">Le catalogue est vide. Lance le seed de l'API.</p>}
-          {!isLoading && !error && featuredGame && (
+          {!isLoading && !error && !search.trim() && featuredGame && (
             <section className="featured-section" aria-label="Jeu mis en avant">
               <button className="carousel-arrow carousel-arrow-left" type="button" onClick={() => changeSlide("previous")} aria-label="Jeu précédent"><ArrowIcon direction="left" /></button>
               <div className="featured-card" style={{ backgroundColor: cubeColors[activeSlide % cubeColors.length][0] }}>
@@ -141,12 +144,12 @@ export function HomePage() {
                   <p className="card-kicker">Choix du moment · {featuredGame.categorie}</p>
                   <h1>{featuredGame.titre}</h1>
                   <p>{featuredGame.description}</p>
-                  <Link className="featured-link" to="/games">Découvrir le jeu <span aria-hidden="true">↗</span></Link>
+                  <Link className="featured-link" to={`/games/${featuredGame.id}`}>Découvrir le jeu <span aria-hidden="true">↗</span></Link>
                 </div>
               </div>
               <button className="carousel-arrow carousel-arrow-right" type="button" onClick={() => changeSlide("next")} aria-label="Jeu suivant"><ArrowIcon direction="right" /></button>
               <div className="carousel-dots" aria-label="Sélection du jeu mis en avant">
-                {games.slice(0, 4).map((game, index) => <button className={index === activeSlide ? "carousel-dot carousel-dot-active" : "carousel-dot"} key={game.id} type="button" onClick={() => setActiveSlide(index)} aria-label={`Afficher ${game.titre}`} />)}
+                {featuredGames.slice(0, 6).map((game, index) => <button className={index === activeSlide ? "carousel-dot carousel-dot-active" : "carousel-dot"} key={game.id} type="button" onClick={() => setActiveSlide(index)} aria-label={`Afficher ${game.titre}`} />)}
               </div>
             </section>
           )}
@@ -157,7 +160,7 @@ export function HomePage() {
               <div className="game-grid">
                 {games.map((game, index) => {
                   const colors = cubeColors[index % cubeColors.length]
-                  return <Link className="game-card" to="/games" key={game.id}>
+                  return <Link className="game-card" to={`/games/${game.id}`} key={game.id}>
                     <div className="game-cover" style={{ backgroundColor: colors[0], "--card-delay": `${Math.min(index, 8) * 45}ms` } as CSSProperties}>
                       <span className="game-number">{String(index + 1).padStart(2, "0")}</span>
                       <span className="game-cube" style={{ "--cube-color": colors[1] } as CSSProperties} aria-hidden="true"><span className="cube-face cube-front" /><span className="cube-face cube-top" /><span className="cube-face cube-side" /></span>

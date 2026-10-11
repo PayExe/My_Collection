@@ -3,6 +3,7 @@ uvicorn[standard]
 sqlalchemy
 aiosqlite
 PyJWT
-pwdlib[argon2]
+passlib[bcrypt]
+bcrypt==4.0.1
 python-dotenv
 python-multipart

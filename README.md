@@ -1,230 +1,183 @@
-# Gamefolio — Ma Collection de jeux vidéo
+# Gamefolio - Ma Collection de jeux vidéo
 
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
-![Licence](https://img.shields.io/badge/Licence-MIT-green)
+Application web de gestion d'une collection personnelle de jeux vidéo.
 
-**Gamefolio** est une application web qui permet de parcourir un catalogue de jeux
-vidéo et de constituer sa collection personnelle, avec un compte protégé par
-authentification.
-
-- **Pour qui ?** Toute personne qui souhaite garder une trace des jeux qu'elle
-  possède et découvrir de nouveaux titres.
-- **Pourquoi ?** Réunir un catalogue clair, une recherche simple et une collection
-  personnelle, dans une interface légère qui fonctionne dans le navigateur.
-- **Comment ?** Un frontend **React + TypeScript (Vite)** qui consomme une API
-  **FastAPI** protégée par **JWT** et adossée à une base **SQLite**.
-
-## Sommaire
-
-- [Aperçu](#aperçu)
-- [Prérequis](#prérequis)
-- [Installation & démarrage rapide](#installation--démarrage-rapide)
-- [Démonstration](#démonstration)
-- [Structure du dépôt](#structure-du-dépôt)
-- [API](#api)
-- [Contribution](#contribution)
-- [Limites connues](#limites-connues)
-- [Licence](#licence)
+Le projet associe une API FastAPI, une base SQLite asynchrone et une interface React + TypeScript.
 
 ## Aperçu
 
-Fonctionnalités disponibles :
+Gamefolio permet de :
 
-- **Compte** : inscription, connexion et déconnexion sécurisées.
-- **Catalogue** : liste paginée des jeux avec recherche textuelle.
-- **Filtres** : sélection d'une catégorie (Action, RPG, Course, Aventure,
-  Simulation, Gestion).
-- **Interface** : jeu mis en avant, pagination configurable et bascule
-  thème clair / thème sombre.
-- **Routes protégées** : le catalogue n'est accessible qu'une fois connecté.
-
-Les écrans « Ma collection » et l'édition d'un jeu sont en cours de développement
-(voir [Limites connues](#limites-connues)).
+- créer un compte et se connecter ;
+- consulter un catalogue public de jeux ;
+- rechercher, filtrer et paginer le catalogue ;
+- consulter la fiche détaillée d'un jeu ;
+- ajouter des jeux à sa collection personnelle ;
+- modifier le statut, la note et le commentaire d'une entrée ;
+- supprimer une entrée ;
+- consulter ses statistiques personnelles.
 
 ## Prérequis
 
-| Outil | Version conseillée | Rôle |
-| --- | --- | --- |
-| [Git](https://git-scm.com/) | 2.30+ | Récupérer le dépôt |
-| [Python](https://www.python.org/) | 3.13 | Backend FastAPI |
-| [Node.js](https://nodejs.org/) | 20+ (avec npm) | Frontend React / Vite |
+- Git 2.30 ou supérieur
+- Python 3.12 ou supérieur
+- Node.js 20 ou supérieur avec npm
 
-Les dépendances Python sont listées dans [`api/requirements.txt`](api/requirements.txt)
-et les dépendances JavaScript dans [`MyCollection/package.json`](MyCollection/package.json).
-Elles sont installées automatiquement aux étapes suivantes.
+## Installation
 
-## Installation & démarrage rapide
+Depuis la racine du dépôt :
 
-Les commandes ci-dessous sont à exécuter depuis la racine du dépôt (`My_Collection`).
-
-### 1. Récupérer le projet
-
-```bash
-git clone https://github.com/PayExe/My_Collection.git
-cd My_Collection
-```
-
-### 2. Backend (API FastAPI)
-
-Créer et activer un environnement virtuel :
-
-```bash
+```powershell
 python -m venv .venv
-
-# Windows (PowerShell / cmd)
-.venv\Scripts\activate
-
-# macOS / Linux
-source .venv/bin/activate
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r api\requirements.txt
+Copy-Item api\.env.example api\.env
 ```
 
-Installer les dépendances :
+Remplacer ensuite `SECRET_KEY` dans `api/.env` par une clé secrète longue. Ce fichier ne doit jamais être commit.
 
-```bash
-pip install -r api/requirements.txt
-```
+Dans un second terminal :
 
-Créer le fichier de configuration à partir du modèle :
-
-```bash
-# Windows
-copy api\.env.example api\.env
-
-# macOS / Linux
-cp api/.env.example api/.env
-```
-
-Générer une clé secrète et la reporter dans `api/.env` (`SECRET_KEY=...`) :
-
-```bash
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-Remplir le catalogue et lancer l'API :
-
-```bash
-python -m api.seed
-uvicorn api.main:app --reload
-```
-
-L'API écoute sur `http://127.0.0.1:8000` et sa documentation interactive est
-disponible sur `http://127.0.0.1:8000/docs`.
-
-### 3. Frontend (React + Vite)
-
-Dans un **second terminal**, toujours depuis la racine :
-
-```bash
-cd MyCollection
+```powershell
+cd web
 npm install
+```
+
+## Démarrage rapide
+
+### Backend
+
+Depuis la racine du projet :
+
+```powershell
+python -m api.seed
+python -m uvicorn api.main:app --reload
+```
+
+L'API est disponible sur http://127.0.0.1:8000.
+
+La documentation interactive est disponible sur http://127.0.0.1:8000/docs.
+
+### Frontend
+
+Dans un second terminal :
+
+```powershell
+cd web
 npm run dev
 ```
 
-L'application est accessible sur `http://localhost:5173`.
+L'application est disponible sur http://localhost:5173.
 
-> Par défaut, le frontend appelle l'API sur `http://127.0.0.1:8000`. Pour changer
-> l'adresse, créer un fichier `MyCollection/.env.local` avec
-> `VITE_API_URL=http://autre-adresse:port`.
+Le frontend utilise `http://127.0.0.1:8000` par défaut. Une autre adresse peut être définie avec `VITE_API_URL` dans `web/.env.local`.
 
 ## Démonstration
 
-Parcours complet, de l'arrivée sur le site à l'utilisation du catalogue :
+1. Ouvrir l'application et créer un compte.
+2. Se connecter avec les identifiants créés.
+3. Parcourir le catalogue et utiliser la recherche ou les catégories.
+4. Ouvrir la fiche d'un jeu.
+5. Ajouter le jeu à la collection.
+6. Modifier son statut, sa note ou son commentaire.
+7. Consulter les statistiques.
+8. Supprimer l'entrée ou se déconnecter.
 
-1. Ouvrir `http://localhost:5173` : la page de **connexion** s'affiche.
-2. Cliquer sur **S'inscrire**, saisir une adresse email et un mot de passe
-   (8 caractères minimum), puis **Créer le compte**.
-   → Résultat attendu : le compte est créé, la page revient sur la connexion.
-3. Se **connecter** avec les identifiants créés.
-   → Résultat attendu : redirection vers `/home`, l'adresse email apparaît en
-   haut à droite.
-4. Parcourir le **catalogue** : utiliser la barre de recherche pour filtrer par
-   titre ou mot-clé, cliquer sur une catégorie dans la barre latérale.
-   → Résultat attendu : la grille et le bloc « Choix du moment » se mettent à jour.
-5. Changer le **nombre de jeux par page** (6, 12 ou 24) et naviguer avec
-   **Précédent / Suivant**.
-6. Cliquer sur l'icône **⚙ (paramètres)** pour basculer entre thème clair et
-   thème sombre.
-7. Cliquer sur **Se déconnecter**.
-   → Résultat attendu : retour à la page de connexion, le catalogue n'est plus
-   accessible sans se reconnecter.
-
-> Astuce : ajouter ici une capture d'écran ou un GIF de l'accueil pour rendre la
-> prise en main encore plus claire.
-
-## Structure du dépôt
+## Architecture
 
 ```text
-My_Collection/
-├── api/                     # Backend FastAPI
-│   ├── core/                # Configuration et sécurité (JWT, Argon2)
-│   ├── db/                  # Moteur et sessions SQLAlchemy (async)
-│   ├── dependencies/        # Dépendances FastAPI (session, utilisateur courant)
-│   ├── models/              # Modèles SQLAlchemy (User, Game, CollectionEntry)
-│   ├── routers/             # Routes HTTP (auth, catalog, collection)
-│   ├── schemas/             # Schémas Pydantic (entrées / sorties)
-│   ├── services/            # Logique métier (authentification)
-│   ├── main.py              # Point d'entrée de l'API
-│   ├── seed.py              # Jeu de données du catalogue
-│   └── requirements.txt     # Dépendances Python
-├── MyCollection/            # Frontend React + Vite + TypeScript
-│   └── src/
-│       ├── components/      # Composants réutilisables (ProtectedRoute)
-│       ├── contexts/        # Contexte d'authentification
-│       ├── hooks/           # Hooks personnalisés (useAuth)
-│       ├── pages/           # Pages (Auth, Home, Game, GameEdit, 404)
-│       ├── services/        # Appels à l'API
-│       ├── styles/          # Feuilles de style
-│       └── types/           # Types TypeScript partagés
-├── docs/                    # Documentation technique et utilisateur
-│   ├── adr/                 # Décisions d'architecture (ADR)
-│   └── guide-utilisateur.md # Guide pour les utilisateurs
+Gamefolio/
+├── api/       backend FastAPI, SQLAlchemy et SQLite
+├── web/       frontend React, TypeScript et Vite
+├── docs/      ADR et documentation générale
 └── README.md
 ```
 
-## API
+### Backend
 
-Base locale : `http://127.0.0.1:8000`. Documentation OpenAPI : `/docs`.
+```text
+api/
+├── core/           configuration et sécurité JWT/bcrypt
+├── db/             moteur SQLite et sessions SQLAlchemy
+├── dependencies/   session et utilisateur courant
+├── models/         tables User, Game et CollectionEntry
+├── routers/        routes auth, catalogue et collection
+├── schemas/        formats JSON et validation
+├── services/       logique métier d'authentification
+└── seed.py         peuplement du catalogue
+```
 
-| Méthode | Route | Description | Auth |
-| --- | --- | --- | --- |
-| `POST` | `/auth/register` | Créer un compte | Non |
-| `POST` | `/auth/login` | Se connecter (JSON) | Non |
-| `POST` | `/token` | Se connecter (formulaire OAuth2) | Non |
-| `GET` | `/auth/me` | Profil de l'utilisateur connecté | Oui |
-| `GET` | `/items` | Rechercher dans le catalogue (`q`, `categorie`, `page`, `limit`) | Non |
-| `GET` | `/items/categories` | Liste des catégories disponibles | Non |
-| `GET` | `/items/{item_id}` | Détail d'un jeu | Non |
+### Frontend
 
-Les routes protégées attendent un en-tête `Authorization: Bearer <token>`.
+```text
+web/src/
+├── components/     composants partagés et protection des routes
+├── contexts/       AuthContext et CollectionContext
+├── hooks/          hooks personnalisés
+├── pages/          écrans de l'application
+├── services/       client HTTP et services métier
+├── styles/         styles de l'interface
+└── types/          types TypeScript du contrat API
+```
+
+## API principale
+
+| Méthode | Route | Accès |
+|---|---|---|
+| `POST` | `/auth/register` | Public |
+| `POST` | `/auth/login` | Public |
+| `GET` | `/auth/me` | Authentifié |
+| `GET` | `/items` | Public |
+| `GET` | `/items/{item_id}` | Public |
+| `GET` | `/me/collection` | Authentifié |
+| `POST` | `/me/collection` | Authentifié |
+| `PATCH` | `/me/collection/{entry_id}` | Authentifié |
+| `DELETE` | `/me/collection/{entry_id}` | Authentifié |
+| `GET` | `/me/stats` | Authentifié |
+
+Les routes protégées utilisent l'en-tête :
+
+```text
+Authorization: Bearer <token>
+```
+
+## Documentation
+
+- `api/README.md` : fonctionnement et organisation du backend.
+- `api/docs/crud-fonctionnement.md` : fonctionnement de la base et du CRUD.
+- `web/docs/authentication-front.md` : authentification et routes React protégées.
+- `docs/adr/0001-authentification-jwt.md` : décision concernant l'authentification.
+- `docs/guide-utilisateur.md` : guide destiné aux utilisateurs.
+
+## Vérifications
+
+Backend :
+
+```powershell
+python -m compileall -q api
+```
+
+Frontend :
+
+```powershell
+cd web
+npm run lint
+npm run build
+```
 
 ## Contribution
 
-1. Créer une *issue* décrivant le besoin (bug, fonctionnalité, documentation).
-2. Créer une branche dédiée en partant de `main`, nommée selon l'intention :
-   `feature/…`, `fix/…` ou `docs/…`.
-3. Committer avec un message clair, au format `type(scope): description`.
-4. Ouvrir une *Pull Request* décrivant le contexte, le changement, l'impact et
-   une checklist de vérification.
-5. Faire relire la PR par un pair et itérer jusqu'à l'approbation.
-
-Aucun commit n'est poussé directement sur `main`.
+1. Créer une branche dédiée depuis `main`.
+2. Commiter une fonctionnalité ou une correction cohérente.
+3. Tester le backend et le frontend.
+4. Ouvrir une Pull Request avec le contexte, les changements et la checklist.
+5. Faire relire la Pull Request avant intégration dans `main`.
 
 ## Limites connues
 
-- La collection personnelle (« Ma collection ») et l'édition d'un jeu ne sont pas
-  encore implémentées côté interface ; les pages correspondantes sont des
-  ébauches.
-- Les routes de gestion de la collection (`/me/collection`, `/me/stats`) ne sont
-  pas encore exposées par l'API.
-- L'API n'a pas de suite de tests automatisés.
-- Le token est stocké dans le `localStorage` du navigateur (voir l'ADR sur
-  l'authentification pour les conséquences associées).
+- Les tests automatisés peuvent encore être développés davantage.
+- Le JWT est stocké dans `localStorage`, ce qui doit être expliqué en soutenance.
+- Les fichiers SQLite et `.env` restent locaux et ne sont pas versionnés.
 
 ## Licence
 
-Ce projet est distribué sous licence **MIT**. Voir le fichier `LICENSE` pour le
-texte complet. Sans licence explicite, le droit d'auteur s'appliquerait
-automatiquement par défaut.
+Ce projet est distribué sous licence MIT. Voir `LICENSE`.

@@ -10,6 +10,8 @@ from api.db.database import close_database, create_db_and_tables
 from api.routers.auth import router as auth_router
 from api.routers.auth import token_router
 from api.routers.catalog import router as catalog_router
+from api.routers.collection import router as collection_router
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -33,7 +35,10 @@ app.add_middleware(
 
 
 @app.exception_handler(HTTPException)
-async def http_exception_handler(_: Request, exception: HTTPException) -> JSONResponse:
+async def http_exception_handler(
+    _: Request,
+    exception: HTTPException,
+) -> JSONResponse:
     return JSONResponse(
         status_code=exception.status_code,
         content={
@@ -46,7 +51,10 @@ async def http_exception_handler(_: Request, exception: HTTPException) -> JSONRe
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(_: Request, __: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(
+    _: Request,
+    __: RequestValidationError,
+) -> JSONResponse:
     return JSONResponse(
         status_code=422,
         content={
@@ -57,6 +65,8 @@ async def validation_exception_handler(_: Request, __: RequestValidationError) -
         },
     )
 
+
 app.include_router(auth_router)
 app.include_router(token_router)
 app.include_router(catalog_router)
+app.include_router(collection_router)

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from pwdlib import PasswordHash
+from passlib.context import CryptContext
 
 from api.core.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
@@ -10,15 +10,18 @@ from api.core.config import (
 )
 
 
-password_hash = PasswordHash.recommended()
+password_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+)
 
 
 def hash_password(password: str) -> str:
-    return password_hash.hash(password)
+    return password_context.hash(password)
 
 
 def verify_password(password: str, hashed_password: str) -> bool:
-    return password_hash.verify(password, hashed_password)
+    return password_context.verify(password, hashed_password)
 
 
 def create_access_token(subject: str) -> str:

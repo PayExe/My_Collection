@@ -1,5 +1,5 @@
 import { apiRequest } from "./apiClient"
-import type { PaginatedItems } from "../types/api"
+import type { Item, PaginatedItems } from "../types/api"
 
 interface CatalogQuery {
   query?: string
@@ -17,4 +17,8 @@ export function getGames({ query = "", category = "", limit = 6, page = 1 }: Cat
 
 export function getCategories(): Promise<string[]> {
   return apiRequest<string[]>("/items/categories")
+}
+
+export function getGame(itemId: number): Promise<Item> {
+  return apiRequest<Item>(`/items/${itemId}`)
 }
