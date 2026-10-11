@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 
 import { FeaturedCarousel } from "../components/home/FeaturedCarousel"
 import { GameGrid } from "../components/home/GameGrid"
-import { SettingsIcon, UserIcon } from "../components/home/HomeIcons"
+import { UserIcon } from "../components/home/HomeIcons"
+import { ThemeToggle } from "../components/ThemeToggle"
 import { useAuth } from "../hooks/useAuth"
 import { useTheme } from "../hooks/useTheme"
 import { ApiRequestError } from "../services/apiClient"
@@ -24,7 +25,7 @@ export function HomePage() {
   const [limit, setLimit] = useState(6)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const { isLightMode, toggleTheme } = useTheme()
+  const { isLightMode } = useTheme()
 
   useEffect(() => {
     getCategories()
@@ -90,7 +91,7 @@ export function HomePage() {
             <input type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); setActiveSlide(0) }} placeholder="Rechercher un jeu" />
           </label>
           <div className="header-actions">
-            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={toggleTheme}><SettingsIcon /></button>
+            <ThemeToggle className="account-button" />
             <Link className="account-button" to="/collection" aria-label="Ma collection"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></Link>
           </div>
         </header>

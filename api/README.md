@@ -4,13 +4,11 @@ Backend de l'application **Ma Collection**, réalisé avec FastAPI, SQLAlchemy e
 
 ## Lancer le backend
 
-Depuis la racine du projet :
+La procédure complète (Windows, macOS, Linux et dépannage) est décrite dans le [README racine](../README.md#démarrage-rapide). En résumé, depuis la racine du projet, environnement virtuel activé et `api/.env` créé :
 
 ```powershell
-.\.venv\Scripts\Activate.ps1
 python -m pip install -r api/requirements.txt
-Copy-Item api/.env.example api/.env
-# Remplacer ensuite SECRET_KEY dans api/.env par une vraie valeur aleatoire
+python -m api.seed
 python -m uvicorn api.main:app --reload
 ```
 

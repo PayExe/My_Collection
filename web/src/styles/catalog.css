@@ -12,8 +12,10 @@
 }
 
 .catalog-cover {
+  position: relative;
   display: flex;
-  min-height: 14rem;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
@@ -25,7 +27,7 @@
 
 .catalog-card:nth-child(3n) .catalog-cover { background: linear-gradient(140deg, #493466, #f48fb1); }
 .catalog-card:nth-child(4n) .catalog-cover { background: linear-gradient(140deg, #294f43, #d9ed72); color: #101012; }
-.catalog-cover span { font-size: 0.72rem; font-weight: 700; opacity: 0.8; }
+.catalog-cover span { position: relative; z-index: 3; align-self: flex-start; padding: 0.2rem 0.45rem; background: rgba(0, 0, 0, 0.6); color: #fff; font-size: 0.72rem; font-weight: 700; }
 .catalog-cover strong { max-width: 9rem; font-size: 1.15rem; line-height: 1; }
 .catalog-card h2 { margin: 0; font-size: 0.9rem; }
 .catalog-card p { margin-top: 0.2rem; color: var(--app-muted); font-size: 0.72rem; }

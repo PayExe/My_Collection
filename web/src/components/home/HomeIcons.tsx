@@ -10,15 +10,6 @@ export function ArrowIcon({ direction }: ArrowIconProps) {
   )
 }
 
-export function SettingsIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="icon">
-      <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-      <path d="m19 13.4 1.2 1-.2 1.8-1.6.8-.3 1.8-1.6.8-1.4-.8-1.5 1.1-1.7-.6-.3-1.7-1.7-.6-1.1-1.4.6-1.7-1-1.5.6-1.7 1.7-.3.6-1.7 1.4-1 1.7.6 1.5-1.1 1.7.6.3 1.7 1.7.6 1.1 1.4-.6 1.7 1 1.5-.6 1.7-1.7.3-.6 1.7-1.4 1Z" />
-    </svg>
-  )
-}
-
 export function UserIcon() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="icon">

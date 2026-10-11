@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 
 import type { Item } from "../../types/api"
+import { GameCover } from "../GameCover"
 import { cubeColors } from "./cubeColors"
 import { ArrowIcon } from "./HomeIcons"
 
@@ -24,6 +25,7 @@ export function FeaturedCarousel({ games, activeSlide, onSlideChange }: Featured
     <section className="featured-section" aria-label="Jeu mis en avant">
       <button className="carousel-arrow carousel-arrow-left" type="button" onClick={() => changeSlide("previous")} aria-label="Jeu précédent"><ArrowIcon direction="left" /></button>
       <div className="featured-card" style={{ backgroundColor: cubeColors[activeSlide % cubeColors.length][0] }}>
+        <GameCover key={`cover-${featuredGame.id}`} src={featuredGame.image_url} title={featuredGame.titre} className="featured-cover" />
         <div className="featured-copy" key={featuredGame.id}>
           <p className="card-kicker">Choix du moment · {featuredGame.categorie}</p>
           <h1>{featuredGame.titre}</h1>

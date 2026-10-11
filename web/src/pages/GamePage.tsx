@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
+import { GameCover } from "../components/GameCover"
 import { PageShell } from "../components/PageShell"
 import { ApiRequestError } from "../services/apiClient"
 import { getCategories, getGames } from "../services/catalogService"
@@ -67,7 +68,7 @@ export function GamePage() {
         <section className="catalog-grid" aria-label="Catalogue des jeux">
           {games.map((game) => (
             <Link className="catalog-card" to={`/games/${game.id}`} key={game.id}>
-              <div className="catalog-cover"><span>{String(game.annee)}</span><strong>{game.titre}</strong></div>
+              <div className="catalog-cover"><GameCover src={game.image_url} title={game.titre} /><span>{String(game.annee)}</span><strong>{game.titre}</strong></div>
               <div><h2>{game.titre}</h2><p>{game.categorie} · {game.plateforme}</p></div>
             </Link>
           ))}

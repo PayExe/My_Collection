@@ -23,7 +23,7 @@ L'API doit tourner sur http://127.0.0.1:8000. Pour changer cette adresse, défin
 ```text
 src/
 ├── components/       composants partagés et routes protégées
-├── contexts/         AuthContext et CollectionContext
+├── contexts/         AuthContext, CollectionContext et ThemeContext
 ├── hooks/            hooks personnalisés
 ├── pages/            écrans associés aux routes
 ├── services/         client HTTP et services métier
