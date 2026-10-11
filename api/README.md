@@ -36,6 +36,7 @@ api/
 ├── seed.py                    # Peuple le catalogue de jeux vidéo
 ├── core/
 │   ├── config.py              # Configuration et variables d'environnement
+│   ├── errors.py              # Handlers d'erreur au format uniforme
 │   └── security.py            # Hash des mots de passe et JWT
 ├── db/
 │   ├── base.py                # Base declarative SQLAlchemy
@@ -50,6 +51,7 @@ api/
 │   └── collection.py          # Données entrantes/sortantes des collections
 ├── dependencies/
 │   ├── database.py            # Session de base de données
+│   ├── pagination.py          # Paramètres page et limit du catalogue
 │   └── auth.py                # Utilisateur connecté et vérification JWT
 ├── services/
 │   └── auth_service.py        # Logique d'authentification sans FastAPI

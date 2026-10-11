@@ -14,8 +14,6 @@ from api.db.base import Base
 
 
 class CollectionEntry(Base):
-    """Jeu ajouté dans la collection personnelle d'un utilisateur."""
-
     __tablename__ = "collection_entries"
     __table_args__ = (
         UniqueConstraint(
@@ -45,7 +43,7 @@ class CollectionEntry(Base):
         nullable=False,
     )
     statut: Mapped[str] = mapped_column(String(20), nullable=False)
-    note: Mapped[int] = mapped_column(Integer, nullable=False)
+    note: Mapped[int | None] = mapped_column(Integer, nullable=True)
     commentaire: Mapped[str | None] = mapped_column(
         String(1000),
         nullable=True,

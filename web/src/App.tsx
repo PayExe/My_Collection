@@ -13,8 +13,8 @@ import { StatsPage } from "./pages/StatsPage"
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AuthPage mode="login" />} />
-      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />
       <Route path="/games" element={<GamePage />} />
       <Route path="/games/:itemId" element={<GameDetailPage />} />

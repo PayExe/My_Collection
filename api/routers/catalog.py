@@ -5,6 +5,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dependencies.database import get_session
+from api.dependencies.pagination import Pagination, get_pagination
 from api.models.game import Game
 from api.schemas.game import ItemPublic, PaginatedItems
 
@@ -19,10 +20,9 @@ router = APIRouter(tags=["Catalogue"])
 )
 async def list_items(
     session: Annotated[AsyncSession, Depends(get_session)],
+    pagination: Annotated[Pagination, Depends(get_pagination)],
     q: str | None = Query(default=None, min_length=2),
     categorie: str | None = Query(default=None),
-    page: int = Query(default=1, ge=1),
-    limit: int = Query(default=12, ge=1, le=50),
 ) -> PaginatedItems:
     filters = []
     if q:
@@ -37,15 +37,15 @@ async def list_items(
         select(Game)
         .where(*filters)
         .order_by(Game.id)
-        .offset((page - 1) * limit)
-        .limit(limit)
+        .offset(pagination.offset)
+        .limit(pagination.limit)
     )
     games = (await session.scalars(games_query)).all()
 
     return PaginatedItems(
         total=total,
-        page=page,
-        limit=limit,
+        page=pagination.page,
+        limit=pagination.limit,
         results=[ItemPublic.model_validate(game) for game in games],
     )
 

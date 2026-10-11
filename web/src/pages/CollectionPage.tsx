@@ -25,7 +25,7 @@ export function CollectionPage() {
       : [...entries]
     return filtered.sort((left, right) =>
       sort === "note"
-        ? right.note - left.note
+        ? (right.note ?? 0) - (left.note ?? 0)
         : right.date_ajout.localeCompare(left.date_ajout),
     )
   }, [entries, sort, status])
@@ -82,7 +82,7 @@ export function CollectionPage() {
               <p>{entry.item.studio} · {entry.item.plateforme}</p>
               <div className="item-meta">
                 <span className="status-pill">{statusLabels[entry.statut]}</span>
-                <span>{entry.note}/5</span>
+                <span>{entry.note === null ? "Pas de note" : `${entry.note}/5`}</span>
               </div>
               {entry.commentaire && <p>“{entry.commentaire}”</p>}
               <div className="item-actions">

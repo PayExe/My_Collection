@@ -191,10 +191,10 @@ async def update_collection_entry(
     entry, game = owned_entry
     provided_fields = payload.model_fields_set
 
-    if "statut" in provided_fields:
-        entry.statut = payload.statut  # type: ignore[assignment]
+    if payload.statut is not None:
+        entry.statut = payload.statut
     if "note" in provided_fields:
-        entry.note = payload.note  # type: ignore[assignment]
+        entry.note = payload.note
     if "commentaire" in provided_fields:
         entry.commentaire = payload.commentaire
 
@@ -265,5 +265,5 @@ async def get_collection_stats(
     return CollectionStats(
         total=total,
         par_statut=status_counts,
-        note_moyenne=float(average or 0),
+        note_moyenne=round(float(average), 2) if average is not None else None,
     )

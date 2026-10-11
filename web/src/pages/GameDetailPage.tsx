@@ -40,7 +40,7 @@ export function GameDetailPage() {
             <h2>{game.titre}</h2>
             <p>{game.description}</p>
             <div className="item-meta"><span>{game.studio}</span><span>{game.plateforme}</span></div>
-            {user ? <Link className="primary-button" to={`/game-edit?item_id=${game.id}`}>Ajouter à ma collection</Link> : <Link className="primary-button" to="/">Se connecter pour l'ajouter</Link>}
+            {user ? <Link className="primary-button" to={`/game-edit?item_id=${game.id}`}>Ajouter à ma collection</Link> : <Link className="primary-button" to="/login">Se connecter pour l'ajouter</Link>}
           </article>
         </section>
       )}

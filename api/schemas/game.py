@@ -2,8 +2,6 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ItemPublic(BaseModel):
-    """Format public d'un jeu dans les réponses API."""
-
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -17,8 +15,6 @@ class ItemPublic(BaseModel):
 
 
 class PaginatedItems(BaseModel):
-    """Résultat paginé du catalogue public."""
-
     total: int
     page: int
     limit: int

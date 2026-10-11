@@ -21,7 +21,7 @@ Si le token est absent, invalide ou expiré :
 ```text
 route privée
     -> ProtectedRoute
-    -> redirection vers /
+    -> redirection vers /login
 ```
 
 ## Organisation des fichiers
@@ -132,7 +132,7 @@ isLoading = true
     -> affiche "Vérification de la session..."
 
 user = null
-    -> Navigate vers /
+    -> Navigate vers /login
 
 user présent
     -> affiche la route avec Outlet
@@ -155,20 +155,22 @@ Cela protège aussi l'accès direct en tapant une URL dans le navigateur. Masque
 ### Publiques
 
 ```text
-/          page de connexion
-/login     redirection vers /
-/register  page d'inscription
+/                redirection vers /home (puis /login sans session)
+/login           page de connexion
+/register        page d'inscription
+/games           catalogue
+/games/:itemId   détail d'un jeu
 ```
 
 ### Protégées
 
 ```text
 /home
-/games
+/collection
+/stats
 /game-edit
+/game-edit/:entryId
 ```
-
-Le sujet indique que le catalogue est public. Actuellement, `/games` est protégé volontairement selon le besoin actuel. Si le catalogue doit respecter strictement le contrat, il faudra sortir `/games` du groupe `ProtectedRoute`.
 
 ## Tester la protection
 
@@ -176,11 +178,11 @@ Le sujet indique que le catalogue est public. Actuellement, `/games` est protég
 2. Lancer le frontend sur `http://localhost:5173`.
 3. Ouvrir une fenêtre privée du navigateur.
 4. Aller directement sur `http://localhost:5173/home`.
-5. Vérifier la redirection vers `/`.
+5. Vérifier la redirection vers `/login`.
 6. Créer un compte puis se connecter.
 7. Vérifier l'accès à `/home`.
 8. Supprimer `access_token` dans le stockage local du navigateur.
-9. Recharger `/home` et vérifier la redirection vers `/`.
+9. Recharger `/home` et vérifier la redirection vers `/login`.
 
 ## Déconnexion
 

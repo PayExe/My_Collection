@@ -1,47 +1,15 @@
-import { useEffect, useState, type CSSProperties } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
+import { FeaturedCarousel } from "../components/home/FeaturedCarousel"
+import { GameGrid } from "../components/home/GameGrid"
+import { SettingsIcon, UserIcon } from "../components/home/HomeIcons"
 import { useAuth } from "../hooks/useAuth"
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { ApiRequestError } from "../services/apiClient"
 import { getCategories, getGames } from "../services/catalogService"
 import type { Item } from "../types/api"
 import "../styles/home.css"
-
-const cubeColors = [
-  ["#203d5a", "#ffbd59"],
-  ["#294f43", "#d9ed72"],
-  ["#493466", "#f48fb1"],
-  ["#743c36", "#ff8d6b"],
-  ["#304a5d", "#b1d8ef"],
-  ["#674b35", "#f3c98b"],
-] as const
-
-function ArrowIcon({ direction }: { direction: "left" | "right" }) {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="icon">
-      <path d={direction === "left" ? "m15 5-7 7 7 7" : "m9 5 7 7-7 7"} />
-    </svg>
-  )
-}
-
-function SettingsIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="icon">
-      <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-      <path d="m19 13.4 1.2 1-.2 1.8-1.6.8-.3 1.8-1.6.8-1.4-.8-1.5 1.1-1.7-.6-.3-1.7-1.7-.6-1.1-1.4.6-1.7-1-1.5.6-1.7 1.7-.3.6-1.7 1.4-1 1.7.6 1.5-1.1 1.7.6.3 1.7 1.7.6 1.1 1.4-.6 1.7 1 1.5-.6 1.7-1.7.3-.6 1.7-1.4 1Z" />
-    </svg>
-  )
-}
-
-function UserIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="icon">
-      <circle cx="12" cy="8" r="3.2" />
-      <path d="M5.5 20c.7-3.4 2.9-5.2 6.5-5.2s5.8 1.8 6.5 5.2" />
-    </svg>
-  )
-}
 
 export function HomePage() {
   const { user, signOut } = useAuth()
@@ -83,14 +51,6 @@ export function HomePage() {
   }, [limit, page, search, selectedCategory])
 
   const filterCategories = ["Tous", ...categories]
-  const featuredGame = featuredGames[activeSlide % Math.max(featuredGames.length, 1)]
-
-  function changeSlide(direction: "previous" | "next") {
-    if (featuredGames.length === 0) return
-    setActiveSlide((current) => direction === "next"
-      ? (current + 1) % featuredGames.length
-      : (current - 1 + featuredGames.length) % featuredGames.length)
-  }
 
   return (
     <main className={isLightMode ? "collection-shell light-mode" : "collection-shell"}>
@@ -136,40 +96,14 @@ export function HomePage() {
           {isLoading && <p className="catalog-message">Chargement du catalogue...</p>}
           {error && <p className="catalog-message catalog-error">{error}</p>}
           {!isLoading && !error && games.length === 0 && <p className="catalog-message">Le catalogue est vide. Lance le seed de l'API.</p>}
-          {!isLoading && !error && !search.trim() && featuredGame && (
-            <section className="featured-section" aria-label="Jeu mis en avant">
-              <button className="carousel-arrow carousel-arrow-left" type="button" onClick={() => changeSlide("previous")} aria-label="Jeu précédent"><ArrowIcon direction="left" /></button>
-              <div className="featured-card" style={{ backgroundColor: cubeColors[activeSlide % cubeColors.length][0] }}>
-                <div className="featured-copy" key={featuredGame.id}>
-                  <p className="card-kicker">Choix du moment · {featuredGame.categorie}</p>
-                  <h1>{featuredGame.titre}</h1>
-                  <p>{featuredGame.description}</p>
-                  <Link className="featured-link" to={`/games/${featuredGame.id}`}>Découvrir le jeu <span aria-hidden="true">↗</span></Link>
-                </div>
-              </div>
-              <button className="carousel-arrow carousel-arrow-right" type="button" onClick={() => changeSlide("next")} aria-label="Jeu suivant"><ArrowIcon direction="right" /></button>
-              <div className="carousel-dots" aria-label="Sélection du jeu mis en avant">
-                {featuredGames.slice(0, 6).map((game, index) => <button className={index === activeSlide ? "carousel-dot carousel-dot-active" : "carousel-dot"} key={game.id} type="button" onClick={() => setActiveSlide(index)} aria-label={`Afficher ${game.titre}`} />)}
-              </div>
-            </section>
+          {!isLoading && !error && !search.trim() && (
+            <FeaturedCarousel games={featuredGames} activeSlide={activeSlide} onSlideChange={setActiveSlide} />
           )}
 
           {!isLoading && !error && (
             <section className="games-section">
               <div className="section-heading"><div><p className="section-label">À explorer</p><h2>Jeux populaires</h2></div><Link to="/games">Voir tout <span aria-hidden="true">→</span></Link></div>
-              <div className="game-grid">
-                {games.map((game, index) => {
-                  const colors = cubeColors[index % cubeColors.length]
-                  return <Link className="game-card" to={`/games/${game.id}`} key={game.id}>
-                    <div className="game-cover" style={{ backgroundColor: colors[0], "--card-delay": `${Math.min(index, 8) * 45}ms` } as CSSProperties}>
-                      <span className="game-number">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="game-cube" style={{ "--cube-color": colors[1] } as CSSProperties} aria-hidden="true"><span className="cube-face cube-front" /><span className="cube-face cube-top" /><span className="cube-face cube-side" /></span>
-                      <strong>{game.titre}</strong>
-                    </div>
-                    <div className="game-card-meta"><strong>{game.titre}</strong><span>{game.categorie}</span></div>
-                  </Link>
-                })}
-              </div>
+              <GameGrid games={games} />
               {games.length === 0 && total > 0 && <p className="empty-search">Aucun jeu ne correspond à ta recherche.</p>}
               {total > 0 && <div className="catalog-pagination">
                 <label htmlFor="page-size">Jeux par page

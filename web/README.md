@@ -36,7 +36,8 @@ src/
 Routes publiques :
 
 ```text
-/                    connexion
+/                    redirige vers /home (puis /login sans session)
+/login               connexion
 /register            inscription
 /games               catalogue
 /games/:itemId       détail d'un jeu

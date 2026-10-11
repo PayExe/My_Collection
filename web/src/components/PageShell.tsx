@@ -25,7 +25,7 @@ export function PageShell({ eyebrow, title, children }: PageShellProps) {
           <NavLink to="/stats">Statistiques</NavLink>
         </nav>
         <div className="app-account">
-          {user ? <><span>{user.email}</span><button type="button" onClick={signOut}>Déconnexion</button></> : <Link to="/">Connexion</Link>}
+          {user ? <><span>{user.email}</span><button type="button" onClick={signOut}>Déconnexion</button></> : <Link to="/login">Connexion</Link>}
         </div>
       </header>
       <section className="page-content">

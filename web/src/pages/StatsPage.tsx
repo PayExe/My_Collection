@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 import { PageShell } from "../components/PageShell"
 import { ApiRequestError } from "../services/apiClient"
@@ -28,10 +29,15 @@ export function StatsPage() {
     <PageShell eyebrow="Vue d'ensemble" title="Tes statistiques">
       {isLoading && <p className="loading-state">Calcul des statistiques...</p>}
       {error && <p className="error-state">{error}</p>}
-      {!isLoading && !error && stats && (
+      {!isLoading && !error && stats?.total === 0 && (
+        <p className="empty-state">
+          Ta collection est vide. <Link to="/games">Ajoute un premier jeu</Link> pour voir tes statistiques.
+        </p>
+      )}
+      {!isLoading && !error && stats && stats.total > 0 && (
         <section className="stats-grid" aria-label="Statistiques de collection">
           <article className="stat-card"><p className="section-eyebrow">Total</p><h2>{stats.total}</h2><p>jeux dans ta collection</p></article>
-          <article className="stat-card"><p className="section-eyebrow">Note moyenne</p><h2>{stats.note_moyenne.toFixed(1)}/5</h2><p>sur l'ensemble de tes jeux notés</p></article>
+          <article className="stat-card"><p className="section-eyebrow">Note moyenne</p><h2>{stats.note_moyenne === null ? "—" : `${stats.note_moyenne.toFixed(1)}/5`}</h2><p>sur l'ensemble de tes jeux notés</p></article>
           <article className="stat-card"><p className="section-eyebrow">À découvrir</p><h2>{stats.par_statut.a_decouvrir}</h2><p>prochaines aventures</p></article>
           <article className="stat-card"><p className="section-eyebrow">En cours</p><h2>{stats.par_statut.en_cours}</h2><p>jeux actuellement lancés</p></article>
           <article className="stat-card"><p className="section-eyebrow">Terminés</p><h2>{stats.par_statut.termine}</h2><p>aventures terminées</p></article>

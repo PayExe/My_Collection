@@ -47,7 +47,6 @@ export function CollectionProvider({ children }: CollectionProviderProps) {
   }, [user])
 
   useEffect(() => {
-    // Loading the authenticated collection synchronizes React with the API session.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh()
   }, [refresh])

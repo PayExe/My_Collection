@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
+import { AuthIntro } from "../components/AuthIntro"
 import type { AuthCredentials } from "../types/api"
 import { useAuth } from "../hooks/useAuth"
 import { ApiRequestError } from "../services/apiClient"
@@ -63,21 +64,7 @@ export function AuthPage({ mode }: AuthPageProps) {
 
   return (
     <main className="auth-shell">
-      <section className="auth-intro" aria-label="Présentation">
-        <Link className="auth-brand" to="/">
-          <span className="brand-mark">GF</span>
-          <span>Gamefolio</span>
-        </Link>
-        <div className="intro-copy">
-          <p className="eyebrow">Collection de jeux</p>
-          <h1>Tous tes jeux, au même endroit.</h1>
-          <p>
-            Garde une trace de ce que tu possèdes et de ce que tu veux
-            découvrir.
-          </p>
-        </div>
-        <p className="intro-footnote">Gamefolio — ta collection de jeux.</p>
-      </section>
+      <AuthIntro />
 
       <section className="auth-panel">
         <div className="auth-card">

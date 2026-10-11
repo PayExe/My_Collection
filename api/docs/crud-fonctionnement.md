@@ -167,7 +167,7 @@ Cette dernière règle est protégée par la contrainte unique :
 (user_id, game_id)
 ```
 
-La base protège également les valeurs métier avec deux contraintes : le statut doit appartenir aux trois valeurs prévues et la note doit être comprise entre 1 et 5. Les schemas Pydantic appliquent les mêmes règles avant l'accès à la base.
+La base protège également les valeurs métier avec deux contraintes : le statut doit appartenir aux trois valeurs prévues et la note, si elle est renseignée, doit être comprise entre 1 et 5. Les schemas Pydantic appliquent les mêmes règles avant l'accès à la base.
 
 La vérification est également faite dans la route afin de renvoyer `409 Conflict` avec un message explicite.
 
@@ -268,7 +268,7 @@ GET /me/collection?tri=note
 }
 ```
 
-La note est facultative dans la requête conformément au contrat API. Lorsqu'elle est absente, le backend utilise la valeur par défaut `1`, qui reste dans l'intervalle autorisé de 1 à 5.
+La note est facultative dans la requête conformément au contrat API. Lorsqu'elle est absente, elle vaut `null` : le jeu n'est pas encore noté. Une note fournie doit être comprise entre 1 et 5.
 
 Le déroulement est :
 
@@ -342,9 +342,9 @@ Les agrégations sont faites par SQLAlchemy :
 
 - `count` pour le total ;
 - `group_by(statut)` pour la répartition ;
-- `avg(note)` pour la moyenne.
+- `avg(note)` pour la moyenne, qui ignore les jeux sans note.
 
-Une collection vide renvoie une moyenne de `0` et des compteurs de statut à `0`.
+Une collection vide, ou sans aucune note, renvoie une moyenne `null`. Les compteurs de statut valent alors `0`.
 
 ## 12. Gestion des transactions
 

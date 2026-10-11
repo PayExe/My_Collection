@@ -5,8 +5,6 @@ from api.db.base import Base
 
 
 class Game(Base):
-    """Jeu disponible dans le catalogue public."""
-
     __tablename__ = "games"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
