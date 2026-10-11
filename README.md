@@ -23,7 +23,7 @@ Gamefolio permet de :
 ### Prérequis
 
 - Python 3.12 ou supérieur : vérifier avec `python --version`
-- Node.js 20 ou supérieur avec npm : vérifier avec `node --version`
+- Node.js 20.19+, 22.13+ ou 24 avec npm : vérifier avec `node --version`
 - Git
 - Une connexion internet, pour installer les dépendances et afficher les jaquettes des jeux
 - Les ports `8000` (API) et `5173` (interface) libres
@@ -46,7 +46,7 @@ python -m venv .venv
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r api\requirements.txt
-Copy-Item api\.env.example api\.env
+Copy-Item api\.env.example api\.env -Force
 $key = python -c "import secrets; print(secrets.token_hex(32))"
 (Get-Content api\.env) -replace '^SECRET_KEY=.*', "SECRET_KEY=$key" | Set-Content api\.env
 python -m api.seed
@@ -180,6 +180,7 @@ web/src/
 | `GET` | `/auth/me` | Authentifié |
 | `GET` | `/items` | Public |
 | `GET` | `/items/{item_id}` | Public |
+| `GET` | `/items/categories` | Public |
 | `GET` | `/me/collection` | Authentifié |
 | `POST` | `/me/collection` | Authentifié |
 | `PATCH` | `/me/collection/{entry_id}` | Authentifié |
