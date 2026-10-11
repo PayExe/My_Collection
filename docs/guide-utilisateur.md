@@ -87,6 +87,22 @@ Le nombre de pages s'ajuste automatiquement.
 L'interface bascule entre le thème clair et le thème sombre. Cliquez à nouveau
 pour revenir au thème précédent.
 
+## Gérer sa collection
+
+1. Depuis l'accueil, ouvrez **Ma collection** dans la navigation.
+2. Cliquez sur **Ajouter un jeu**.
+3. Sélectionnez un jeu, choisissez son statut et attribuez une note.
+4. Ajoutez éventuellement un commentaire, puis cliquez sur **Enregistrer**.
+
+Dans la collection, chaque entrée peut être modifiée ou supprimée. Les filtres par statut et le tri par date ou par note permettent d'organiser les jeux.
+
+## Consulter les statistiques
+
+1. Ouvrez **Statistiques** dans la navigation.
+2. Consultez le nombre total de jeux, la répartition par statut et la note moyenne.
+
+Ces statistiques concernent uniquement votre compte.
+
 ## Se déconnecter
 
 1. Dans la barre latérale de gauche, en bas, cliquez sur **Se déconnecter**.
@@ -126,14 +142,4 @@ Essayez un mot-clé plus court ou vérifiez qu'un filtre de catégorie n'est pas
 actif. Cliquez sur **Tous** pour réafficher l'ensemble des jeux.
 
 **Puis-je utiliser l'application sur mon téléphone ?**
-L'interface est lisible sur petit écran, mais l'adaptation mobile n'est pas encore
-finalisée.
-
-## Fonctionnalités à venir
-
-Les fonctions suivantes ne sont **pas encore disponibles** : elles apparaîtront
-dans une prochaine version.
-
-- Ajouter un jeu à sa collection personnelle.
-- Éditer les informations d'un jeu.
-- Consulter une page de statistiques de sa collection.
+L'interface s'adapte aux petits écrans. La navigation et les cartes restent utilisables à partir d'une largeur de 375 pixels.
