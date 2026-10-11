@@ -1,6 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from passlib.exc import UnknownHashError
 
 from api.core.security import hash_password, verify_password
 from api.models.user import User
@@ -44,6 +45,15 @@ async def create_user(session: AsyncSession, email: str, password: str) -> User:
 
 async def authenticate_user(session: AsyncSession, email: str, password: str) -> User | None:
     user = await find_user_by_email(session, email)
-    if user is None or not verify_password(password, user.hashed_password):
+    if user is None:
         return None
+
+    try:
+        is_password_valid = verify_password(password, user.hashed_password)
+    except UnknownHashError:
+        return None
+
+    if not is_password_valid:
+        return None
+
     return user
