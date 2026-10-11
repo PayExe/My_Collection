@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom"
 
 import { useAuth } from "../hooks/useAuth"
+import { useTheme } from "../hooks/useTheme"
 
 interface PageShellProps {
   eyebrow: string
@@ -10,9 +11,10 @@ interface PageShellProps {
 
 export function PageShell({ eyebrow, title, children }: PageShellProps) {
   const { user, signOut } = useAuth()
+  const { isLightMode, toggleTheme } = useTheme()
 
   return (
-    <main className="app-shell">
+    <main className={isLightMode ? "app-shell light-mode" : "app-shell"}>
       <header className="app-header">
         <Link className="app-brand" to="/home">
           <span className="app-brand-mark">GF</span>
@@ -25,6 +27,7 @@ export function PageShell({ eyebrow, title, children }: PageShellProps) {
           <NavLink to="/stats">Statistiques</NavLink>
         </nav>
         <div className="app-account">
+          <button type="button" onClick={toggleTheme} aria-label="Changer le thème">{isLightMode ? "☾ Sombre" : "☀ Clair"}</button>
           {user ? <><span>{user.email}</span><button type="button" onClick={signOut}>Déconnexion</button></> : <Link to="/login">Connexion</Link>}
         </div>
       </header>

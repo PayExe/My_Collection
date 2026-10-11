@@ -14,6 +14,9 @@ export function AuthIntro() {
           Garde une trace de ce que tu possèdes et de ce que tu veux
           découvrir.
         </p>
+        <Link className="intro-catalog-link" to="/games">
+          Parcourir le catalogue sans compte →
+        </Link>
       </div>
       <p className="intro-footnote">Gamefolio — ta collection de jeux.</p>
     </section>

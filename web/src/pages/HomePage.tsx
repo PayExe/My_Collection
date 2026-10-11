@@ -5,7 +5,7 @@ import { FeaturedCarousel } from "../components/home/FeaturedCarousel"
 import { GameGrid } from "../components/home/GameGrid"
 import { SettingsIcon, UserIcon } from "../components/home/HomeIcons"
 import { useAuth } from "../hooks/useAuth"
-import { useLocalStorage } from "../hooks/useLocalStorage"
+import { useTheme } from "../hooks/useTheme"
 import { ApiRequestError } from "../services/apiClient"
 import { getCategories, getGames } from "../services/catalogService"
 import type { Item } from "../types/api"
@@ -24,7 +24,7 @@ export function HomePage() {
   const [limit, setLimit] = useState(6)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [isLightMode, setIsLightMode] = useLocalStorage("gamefolio-light-mode", false)
+  const { isLightMode, toggleTheme } = useTheme()
 
   useEffect(() => {
     getCategories()
@@ -51,6 +51,7 @@ export function HomePage() {
   }, [limit, page, search, selectedCategory])
 
   const filterCategories = ["Tous", ...categories]
+  const isFiltering = search.trim().length >= 2 || selectedCategory !== "Tous"
 
   return (
     <main className={isLightMode ? "collection-shell light-mode" : "collection-shell"}>
@@ -75,6 +76,8 @@ export function HomePage() {
         <div className="sidebar-bottom">
           <p>Affine ta recherche<br />et trouve ton prochain jeu.</p>
           <Link className="sidebar-catalog-link" to="/games">Ouvrir le catalogue</Link>
+          <Link className="sidebar-catalog-link" to="/collection">Ma collection</Link>
+          <Link className="sidebar-catalog-link" to="/stats">Statistiques</Link>
           <button className="logout-button" type="button" onClick={signOut}>Se déconnecter</button>
         </div>
       </aside>
@@ -87,15 +90,15 @@ export function HomePage() {
             <input type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); setActiveSlide(0) }} placeholder="Rechercher un jeu" />
           </label>
           <div className="header-actions">
-            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={() => setIsLightMode(!isLightMode)}><SettingsIcon /></button>
-            <button className="account-button" type="button" aria-label="Compte"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></button>
+            <button className="header-icon-button" type="button" aria-label="Changer le thème" onClick={toggleTheme}><SettingsIcon /></button>
+            <Link className="account-button" to="/collection" aria-label="Ma collection"><UserIcon /><span>{user?.email?.split("@")[0] ?? "Compte"}</span></Link>
           </div>
         </header>
 
         <div className="home-main">
           {isLoading && <p className="catalog-message">Chargement du catalogue...</p>}
           {error && <p className="catalog-message catalog-error">{error}</p>}
-          {!isLoading && !error && games.length === 0 && <p className="catalog-message">Le catalogue est vide. Lance le seed de l'API.</p>}
+          {!isLoading && !error && games.length === 0 && !isFiltering && <p className="catalog-message">Le catalogue est vide. Lance le seed de l'API.</p>}
           {!isLoading && !error && !search.trim() && (
             <FeaturedCarousel games={featuredGames} activeSlide={activeSlide} onSlideChange={setActiveSlide} />
           )}
@@ -104,7 +107,7 @@ export function HomePage() {
             <section className="games-section">
               <div className="section-heading"><div><p className="section-label">À explorer</p><h2>Jeux populaires</h2></div><Link to="/games">Voir tout <span aria-hidden="true">→</span></Link></div>
               <GameGrid games={games} />
-              {games.length === 0 && total > 0 && <p className="empty-search">Aucun jeu ne correspond à ta recherche.</p>}
+              {games.length === 0 && isFiltering && <p className="empty-search">Aucun jeu ne correspond à ta recherche.</p>}
               {total > 0 && <div className="catalog-pagination">
                 <label htmlFor="page-size">Jeux par page
                   <select id="page-size" value={limit} onChange={(event) => { setLimit(Number(event.target.value)); setPage(1) }}>

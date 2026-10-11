@@ -80,6 +80,19 @@
   line-height: 1.5;
 }
 
+.intro-catalog-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-underline-offset: 0.25rem;
+}
+
+.intro-catalog-link:hover {
+  color: #bdbdbd;
+}
+
 .intro-footnote {
   color: #888;
   font-size: 0.7rem;
@@ -225,5 +238,9 @@
 
   .auth-card {
     padding: 1.75rem 1.25rem;
+  }
+
+  .intro-catalog-link {
+    margin-top: 1rem;
   }
 }

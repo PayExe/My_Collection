@@ -189,7 +189,7 @@
 }
 
 .header-icon-button { width: 2.5rem; }
-.account-button { padding: 0 0.7rem; font: inherit; font-size: 0.72rem; }
+.account-button { padding: 0 0.7rem; font: inherit; font-size: 0.72rem; text-decoration: none; }
 .header-icon-button:hover,
 .account-button:hover { border-color: var(--home-accent); color: var(--home-text); }
 
