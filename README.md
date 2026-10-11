@@ -202,11 +202,14 @@ Authorization: Bearer <token>
 
 ## Vérifications
 
-Backend :
+Backend, depuis la racine :
 
 ```powershell
 python -m compileall -q api
+python -m pytest api/tests
 ```
+
+Les tests utilisent une base SQLite temporaire : la base `ma_collection.db` n'est pas modifiée.
 
 Frontend :
 
@@ -226,7 +229,6 @@ npm run build
 
 ## Limites connues
 
-- Les tests automatisés peuvent encore être développés davantage.
 - Le JWT est stocké dans `localStorage`, ce qui doit être expliqué en soutenance.
 - Les fichiers SQLite et `.env` restent locaux et ne sont pas versionnés.
 

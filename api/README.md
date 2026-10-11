@@ -26,6 +26,16 @@ Le serveur doit être lancé depuis la racine `My_Collection`. Ne lance pas `uvi
 python -m uvicorn api.main:app --reload
 ```
 
+## Tests
+
+Depuis la racine du projet, environnement virtuel activé :
+
+```powershell
+python -m pytest api/tests
+```
+
+Les tests utilisent une base SQLite temporaire, recréée et peuplée avant chaque test. La base `ma_collection.db` n'est jamais modifiée.
+
 ## Organisation
 
 ```text
@@ -53,10 +63,15 @@ api/
 │   └── auth.py                # Utilisateur connecté et vérification JWT
 ├── services/
 │   └── auth_service.py        # Logique d'authentification sans FastAPI
-└── routers/
-    ├── auth.py                # Routes /auth/*
-    ├── catalog.py             # Routes publiques /items/*
-    └── collection.py          # Routes protégées /me/*
+├── routers/
+│   ├── auth.py                # Routes /auth/*
+│   ├── catalog.py             # Routes publiques /items/*
+│   └── collection.py          # Routes protégées /me/*
+└── tests/
+    ├── conftest.py            # Base de test temporaire et utilisateurs
+    ├── test_auth.py           # Inscription, connexion, /auth/me
+    ├── test_catalog.py        # Recherche, filtres, pagination, seed
+    └── test_collection.py     # CRUD, droits du propriétaire, statistiques
 ```
 
 ## Rôle des fichiers
