@@ -49,6 +49,7 @@ export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("Tous")
   const [activeSlide, setActiveSlide] = useState(0)
   const [games, setGames] = useState<Item[]>([])
+  const [featuredGames, setFeaturedGames] = useState<Item[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -71,6 +72,7 @@ export function HomePage() {
         .then((response) => {
           setGames(response.results)
           setTotal(response.total)
+          if (page === 1) setFeaturedGames(response.results)
         })
       .catch((reason: unknown) => {
         setError(reason instanceof ApiRequestError ? reason.message : "Impossible de charger le catalogue.")
@@ -81,13 +83,13 @@ export function HomePage() {
   }, [limit, page, search, selectedCategory])
 
   const filterCategories = ["Tous", ...categories]
-  const featuredGame = games[activeSlide % Math.max(games.length, 1)]
+  const featuredGame = featuredGames[activeSlide % Math.max(featuredGames.length, 1)]
 
   function changeSlide(direction: "previous" | "next") {
-    if (games.length === 0) return
+    if (featuredGames.length === 0) return
     setActiveSlide((current) => direction === "next"
-      ? (current + 1) % games.length
-      : (current - 1 + games.length) % games.length)
+      ? (current + 1) % featuredGames.length
+      : (current - 1 + featuredGames.length) % featuredGames.length)
   }
 
   return (
@@ -134,7 +136,7 @@ export function HomePage() {
           {isLoading && <p className="catalog-message">Chargement du catalogue...</p>}
           {error && <p className="catalog-message catalog-error">{error}</p>}
           {!isLoading && !error && games.length === 0 && <p className="catalog-message">Le catalogue est vide. Lance le seed de l'API.</p>}
-          {!isLoading && !error && featuredGame && (
+          {!isLoading && !error && !search.trim() && featuredGame && (
             <section className="featured-section" aria-label="Jeu mis en avant">
               <button className="carousel-arrow carousel-arrow-left" type="button" onClick={() => changeSlide("previous")} aria-label="Jeu précédent"><ArrowIcon direction="left" /></button>
               <div className="featured-card" style={{ backgroundColor: cubeColors[activeSlide % cubeColors.length][0] }}>
@@ -147,7 +149,7 @@ export function HomePage() {
               </div>
               <button className="carousel-arrow carousel-arrow-right" type="button" onClick={() => changeSlide("next")} aria-label="Jeu suivant"><ArrowIcon direction="right" /></button>
               <div className="carousel-dots" aria-label="Sélection du jeu mis en avant">
-                {games.slice(0, 4).map((game, index) => <button className={index === activeSlide ? "carousel-dot carousel-dot-active" : "carousel-dot"} key={game.id} type="button" onClick={() => setActiveSlide(index)} aria-label={`Afficher ${game.titre}`} />)}
+                {featuredGames.slice(0, 6).map((game, index) => <button className={index === activeSlide ? "carousel-dot carousel-dot-active" : "carousel-dot"} key={game.id} type="button" onClick={() => setActiveSlide(index)} aria-label={`Afficher ${game.titre}`} />)}
               </div>
             </section>
           )}
